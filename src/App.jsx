@@ -14,6 +14,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import CreateInvoice from "./pages/CreateInvoice";
 import WelcomeTemplate from "./pages/WelcomeTemplate";
 import CreateWelcomeTemplate from "./pages/CreateWelcomeTemplate";
+import EditTemplate from "./pages/EditTemplate";
 
 function App() {
 
@@ -28,9 +29,10 @@ function App() {
               <Route path="customer" element={<Customer />} />
               <Route path="invoice" element={<Invoice />} />
               <Route path="payments" element={<Payments />} />
-              <Route path="welcome-template" element={<WelcomeTemplate />} />
-              <Route path="welcome-template/create" element={<CreateWelcomeTemplate />} />
+              <Route path="Template" element={<WelcomeTemplate />} />
+              <Route path="Template/create" element={<CreateWelcomeTemplate />} />
               <Route path="invoice/create" element={<CreateInvoice />} />
+              <Route path="template/edit/:id" element={<EditTemplate />} />
             </Route>
           </Routes>
         </Router>

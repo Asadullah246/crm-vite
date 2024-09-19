@@ -1,12 +1,97 @@
-import React from 'react';
+import * as React from "react";
+import Table from "@mui/material/Table";
+import TableBody from "@mui/material/TableBody";
+import TableCell from "@mui/material/TableCell";
+import TableContainer from "@mui/material/TableContainer";
+import TableHead from "@mui/material/TableHead";
+import TableRow from "@mui/material/TableRow";
+import Paper from "@mui/material/Paper";
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
+import { Typography } from "@mui/material";
+import Button from "@mui/joy/Button";
+import Input from "@mui/joy/Input";
+import { useNavigate } from "react-router-dom";
+import { Box, Grid } from "@mui/joy";
+import ChartsOverviewDemo from "../component/Datachart";
+import BasicPie from "../component/DataPieChart";
 
 const DashboardInfo = () => {
-    return (
-        <div>
-            dashboard info
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Mollitia sapiente, assumenda perspiciatis voluptate esse a fugiat sed quaerat quis similique sunt ratione corporis nobis quisquam natus nesciunt eos molestias, incidunt iure consectetur. Hic itaque delectus fugiat voluptas laudantium dolorem veniam iste ea? Nobis laborum iure totam nemo atque dolorem eius exercitationem in esse enim quaerat placeat a voluptates cumque quos ut, cum labore iusto, dolorum temporibus magni vitae dolor amet! Explicabo nihil maxime dolorem quod dolore libero repudiandae voluptatibus iure provident officia! Culpa repellat accusamus laborum iste aspernatur magni unde rem, aliquid, non illum assumenda commodi eius id cum in consequuntur veritatis eveniet labore placeat. Sequi sed similique ab architecto cum animi at, adipisci labore porro cumque, nostrum delectus corrupti quia nihil tenetur consequuntur iusto eveniet expedita explicabo vel. Aliquam reiciendis ducimus, sed impedit voluptas, tempora rem id fugit culpa exercitationem perspiciatis hic voluptatibus earum. Quidem temporibus, adipisci, expedita dignissimos debitis praesentium dolor numquam amet nostrum eligendi sed explicabo ut provident eveniet! Error quam officia fugit veniam eum quis doloremque, iste perferendis atque cumque, explicabo incidunt maiores vitae fuga consectetur obcaecati praesentium maxime nemo ab beatae enim sit vero fugiat! Enim natus in quas quaerat officiis inventore similique non asperiores ad ducimus quidem qui nisi unde maiores laborum necessitatibus, consectetur, vel doloremque repudiandae minima suscipit, eius dignissimos facere. Natus odio ratione deleniti distinctio quo dignissimos, dolorem ducimus nisi beatae expedita corporis consectetur, provident veritatis, architecto itaque minima amet tempore perspiciatis magnam. Quidem, rerum odio! Fugit harum similique eaque nam quae beatae deserunt ex, incidunt itaque, earum nesciunt aperiam. Odio labore aliquam similique praesentium fuga qui ipsum dolores tenetur architecto? Alias placeat nihil vitae labore maxime impedit ullam quisquam sit minus ex ipsam dignissimos est et saepe, fugit rerum! Repellat neque possimus cupiditate eos aperiam molestias laudantium, est illo excepturi molestiae.
+    const navigate=useNavigate();
+  return (
+    <div>
+      <div className="content-topbar">
+        <div className="content-title">
+          <ArrowBackIcon />
+          <Typography
+            variant="h6"
+            component="h6"
+            style={{ fontWeight: "bold" }}
+          >
+            Good Morning, Admin
+          </Typography>
         </div>
-    );
+        <div className="content-title">
+          <Input size="md" placeholder="Search" />;
+          <Button
+            size="md"
+            variant={"solid"}
+            color="primary"
+            onClick={()=>navigate("/customer")}
+          >
+            Customers
+          </Button>
+          {/* <Button size="md" variant={"solid"} color="primary"  onClick={()=>toggleDrawer("right", true)}>
+            {"right"}
+          </Button> */}
+        </div>
+      </div>
+
+
+        {/* <Typography variant="h6">Section 1</Typography> */}
+        <Grid container spacing={4}>
+          <Grid item xs={12} sm={3} >
+            <div style={{backgroundColor:"#7A40F2",padding:"30px 25px", borderRadius:"12px"}}>
+            <p style={{margin:"0", padding:"0", color:"white"}}>Customers</p>
+           <h2 style={{margin:"0", padding:"0", color:"white", fontSize:"2.5em"}}>20</h2>
+            </div>
+          </Grid>
+          <Grid item xs={12} sm={3} >
+            <div style={{backgroundColor:"#FF9060",padding:"30px 25px", borderRadius:"12px"}}>
+            <p style={{margin:"0", padding:"0", color:"white"}}>Last Month</p>
+           <h2 style={{margin:"0", padding:"0", color:"white", fontSize:"2.5em"}}>$1000</h2>
+            </div>
+          </Grid>
+          <Grid item xs={12} sm={3} >
+            <div style={{backgroundColor:"#3ACBE9",padding:"30px 25px", borderRadius:"12px"}}>
+            <p style={{margin:"0", padding:"0", color:"white"}}>Last Year</p>
+           <h2 style={{margin:"0", padding:"0", color:"white", fontSize:"2.5em"}}>$30000</h2>
+            </div>
+          </Grid>
+          <Grid item xs={12} sm={3} >
+            <div style={{backgroundColor:"#48C99D",padding:"30px 25px", borderRadius:"12px"}}>
+            <p style={{margin:"0", padding:"0", color:"white"}}>Packages</p>
+           <h2 style={{margin:"0", padding:"0", color:"white", fontSize:"2.5em"}}>2</h2>
+            </div>
+          </Grid>
+
+
+        </Grid>
+        <div style={{marginTop:"60px"}}></div> 
+        <Grid container spacing={4}>
+          <Grid item xs={12} sm={6} >
+            <ChartsOverviewDemo/>
+          </Grid>
+          <Grid item xs={12} sm={6} >
+            <BasicPie/>
+          </Grid>
+
+
+        </Grid>
+
+
+
+    </div>
+  );
 };
 
 export default DashboardInfo;

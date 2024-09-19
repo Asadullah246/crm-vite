@@ -30,8 +30,8 @@ export default function TemplateTable({category, redirectUrl}) {
       setLoading(true);
       getData('/template')
         .then((response) => {
-            const categoriedData=response?.data?.filter(single=>single?.category==category)
-          setData(categoriedData);
+            // const categoriedData=response?.data?.filter(single=>single?.category==category)
+          setData(response?.data); 
           setLoading(false);
         })
         .catch(() => setLoading(false));
@@ -91,7 +91,7 @@ export default function TemplateTable({category, redirectUrl}) {
                 {row?.name}
               </TableCell>
               <TableCell align="right">{row?.category}</TableCell>
-              <TableCell align="right"><DropdownForCustomer id={row?._id} setRefresh={setRefresh} refresh={refresh} api={"template"} /></TableCell> 
+              <TableCell align="right"><DropdownForCustomer id={row?._id} setRefresh={setRefresh} refresh={refresh} api={"template"} show={`/template/edit/${row?._id}`} /></TableCell>
             </TableRow>
           ))}
         </TableBody>

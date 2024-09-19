@@ -54,7 +54,7 @@ function Dashboard(props) {
       </Typography>
      </div>
       <List>
-        {["Dashboard", "Customer", "Invoice","welcome-template", "Payments"].map((text, index) => (
+        {["Dashboard", "Customer", "Invoice","Template", "Payments"].map((text, index) => (
           <Link to={text == "Dashboard" ? "/" : text} key={text} style={{padding:0}}>
             <ListItem  style={{paddingTop:5, paddingBottom:5}}>
               <ListItemButton  style={{paddingTop:0, paddingBottom:0, gap:0}}>

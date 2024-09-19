@@ -4,14 +4,35 @@ import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import { Typography } from "@mui/material";
 import Button from "@mui/joy/Button";
 import Input from "@mui/joy/Input";
-import { useNavigate } from "react-router-dom";
-import { postData } from "../others/api";
+import { useNavigate, useParams } from "react-router-dom";
+import { getData, postData, updateData } from "../others/api";
 import toastSuccess from "../component/Alert";
 
-const CreateWelcomeTemplate = () => {
+const EditTemplate = () => {
+    const { id } = useParams();
   const [info, setInfo] = useState();
   const [name,setName]=useState("")
   const [cat,setCat]=useState("")
+  const [data, setData] = React.useState();
+  const [loading, setLoading] = React.useState(false);
+  const [refresh, setRefresh] = React.useState(false);
+  console.log("id", id);
+
+  // Fetch data on component mount
+  React.useEffect(() => {
+    setLoading(true);
+    getData(`/template/${id}`)
+      .then((response) => {
+        console.log("res", response );
+        setData(response?.data);
+        setLoading(false);
+      })
+      .catch(() => setLoading(false));
+  }, [refresh]);
+  console.log("data", data );
+
+
+
   const handleEditor = (newValue, editor) => {
     console.log("value", newValue);
     // console.log("editor", editor.getContent({ format: "text" }));
@@ -20,13 +41,12 @@ const CreateWelcomeTemplate = () => {
 
   const saveToDatabase = (e) => {
     e?.prevent?.default();
-    const data = { templateData:info?.newValue, category: cat, name:name };
+    const data = { templateData:info?.newValue , category:cat, name:name };
     console.log("data", data);
-    postData("/template", data) // Replace '/items' with your API endpoint
+    updateData(`/template/${id}`, data)
       .then((response) => {
-        // setData((prev) => [...prev, response]);
-        toastSuccess("Successfully customer created");
-        console.log("post res", response);
+        toastSuccess("Successfully Template updated");
+        
       });
   };
 
@@ -44,8 +64,8 @@ const CreateWelcomeTemplate = () => {
           </Typography>
         </div>
         <div className="content-title">
-          <Input size="md" placeholder="Template Name" onChange={(e)=>setName(e.target.value)} />
-          <Input size="md" placeholder="Category" onChange={(e)=>setCat(e.target.value)} />
+          <Input size="md" placeholder="Template Name" onChange={(e)=>setName(e.target.value)} />;
+          <Input size="md" placeholder="Category" onChange={(e)=>setCat(e.target.value)} />;
           <Button
             size="md"
             variant={"solid"}
@@ -75,11 +95,11 @@ const CreateWelcomeTemplate = () => {
               Promise.reject("See docs to implement AI Assistant")
             ),
         }}
-        initialValue="type here"
+        initialValue={data?.templateData}
         onEditorChange={handleEditor}
       />
     </div>
   );
 };
 
-export default CreateWelcomeTemplate;
+export default EditTemplate;

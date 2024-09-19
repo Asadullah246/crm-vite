@@ -25,9 +25,9 @@ export const getData = async (endpoint) => {
   };
 
   // PUT request (for updates)
-  export const updateData = async (endpoint, data) => {
+  export const updateData = async (endpoint, data) => { 
     try {
-      const response = await api.put(endpoint, data);
+      const response = await api.patch(endpoint, data);
       return response.data;
     } catch (error) {
       handleError(error);

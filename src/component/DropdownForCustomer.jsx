@@ -11,8 +11,11 @@ import MenuButton from '@mui/joy/MenuButton';
 import Dropdown from '@mui/joy/Dropdown';
 import { deleteData } from '../others/api';
 import toastSuccess from './Alert';
+import { useNavigate } from 'react-router-dom';
 
-export default function DropdownForCustomer({id, setRefresh, refresh, api}) {
+export default function DropdownForCustomer({id, setRefresh, refresh, api, show}) {
+
+  const navigate=useNavigate()
 
     const deleteItem = (id) => {
         deleteData(`/${api}/${id}`) // Replace `/items/${id}` with your API endpoint
@@ -32,7 +35,8 @@ export default function DropdownForCustomer({id, setRefresh, refresh, api}) {
         <MoreVert />
       </MenuButton>
       <Menu placement="bottom-end">
-        <MenuItem>
+        <MenuItem
+        onClick={()=>navigate(show)}>
           <ListItemDecorator>
             <Edit />
           </ListItemDecorator>{' '}
