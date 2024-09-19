@@ -12,6 +12,7 @@ import Button from '@mui/joy/Button';
 import Input from '@mui/joy/Input';
 import AddNewCustomer from './AddNewCustomer';
 import { getData } from '../others/api';
+import DropdownForCustomer from './DropdownForCustomer';
 
 function createData(name, calories, fat, carbs, protein) {
   return { name, calories, fat, carbs, protein };
@@ -31,6 +32,7 @@ export default function BasicTable() {
     const [state, setState] = React.useState(false);
     const [data, setData] = React.useState([]);
     const [loading, setLoading] = React.useState(false);
+    const [refresh, setRefresh] = React.useState(false);
 
     // Fetch data on component mount
     React.useEffect(() => {
@@ -41,7 +43,7 @@ export default function BasicTable() {
           setLoading(false);
         })
         .catch(() => setLoading(false));
-    }, []);
+    }, [refresh]); 
 
     const toggleDrawer = (inOpen) => (event) => {
         if (event.type === 'keydown' && (event.key === 'Tab' || event.key === 'Shift')) {
@@ -106,6 +108,7 @@ export default function BasicTable() {
               <TableCell align="right">{row?.serviceType}</TableCell>
               <TableCell align="right">{row?.price}</TableCell>
               <TableCell align="right">{row?.payment}</TableCell>
+              <TableCell align="right"><DropdownForCustomer id={row?._id} setFresh={setRefresh} refresh={refresh} /></TableCell>
             </TableRow>
           ))}
         </TableBody>

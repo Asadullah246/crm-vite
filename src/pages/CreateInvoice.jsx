@@ -28,16 +28,40 @@ import KeyboardArrowDown from "@mui/icons-material/KeyboardArrowDown";
 
 import { Grid } from "@mui/joy";
 import toastSuccess from "../component/Alert";
+import { getData } from "../others/api";
 // import AddNewCustomer from './AddNewCustomer';
 
 const CreateInvoice = () => {
   const [values, setValues] = React.useState({});
-  const handleInvoiceCreate = (e) => { 
+  const [data, setData] = React.useState([]);
+  const [loading, setLoading] = React.useState(false);
+  const [refresh, setRefresh] = React.useState(false);
+  const [person, setPerson]=React.useState()
+  const [personData, setPersonData]=React.useState()
+
+  // Fetch data on component mount
+  React.useEffect(() => {
+    setLoading(true);
+    getData('/customer')
+      .then((response) => {
+        setData(response?.data);
+        setLoading(false);
+      })
+      .catch(() => setLoading(false));
+  }, [refresh]);
+  React.useEffect(() => {
+    setLoading(true);
+   const currentPerson=data?.find(s=>s?.name==person)
+   setPersonData(currentPerson)
+  }, [refresh, data, person]);
+
+
+  const handleInvoiceCreate = (e) => {
     e?.prevent?.default();
     console.log("click");
     toastSuccess("Successfully done");
   };
-
+console.log("persondata", personData);
   return (
     <div className="pageLayout">
       <div className="content-topbar">
@@ -75,7 +99,13 @@ const CreateInvoice = () => {
                 <FormLabel>Client</FormLabel>
                 <Select
                   fullWidth
-                  placeholder="Select a pet…"
+                  onChange={(event, newValue) =>{
+                    setPerson(newValue)
+                    setValues({ ...values, client: newValue })
+                  }
+                  }
+
+                  placeholder=""
                   indicator={<KeyboardArrowDown />}
                   sx={{
                     width: "100%",
@@ -87,10 +117,11 @@ const CreateInvoice = () => {
                     },
                   }}
                 >
-                  <Option value="dog">client 1</Option>
-                  <Option value="cat">client 2</Option>
-                  <Option value="fish">client 3</Option>
-                  <Option value="bird">client 4</Option>
+                  {data?.map(person=>{
+                    return (
+                      <Option key={person?._id} value={person?.name}>{person?.name}</Option>
+                    )
+                  })}
                 </Select>
                 <FormHelperText></FormHelperText>
               </FormControl>
@@ -102,9 +133,9 @@ const CreateInvoice = () => {
                 <FormLabel>Number</FormLabel>
                 <Input
                   type="number"
-                  value={values.phone}
+                  value={values.number}
                   onChange={(event) =>
-                    setValues({ ...values, phone: event.target.value })
+                    setValues({ ...values, number: event.target.value })
                   }
                 />
                 <FormHelperText></FormHelperText>
@@ -115,9 +146,9 @@ const CreateInvoice = () => {
                 <FormLabel>Year</FormLabel>
                 <Input
                   type="number"
-                  value={values.phone}
+                  value={values.year}
                   onChange={(event) =>
-                    setValues({ ...values, phone: event.target.value })
+                    setValues({ ...values, year: event.target.value })
                   }
                 />
                 <FormHelperText></FormHelperText>
@@ -127,6 +158,10 @@ const CreateInvoice = () => {
               <FormControl fullWidth>
                 <FormLabel>Status</FormLabel>
                 <Select
+                  onChange={(event, newValue) =>{
+                    setValues({ ...values, status: newValue})
+                  }
+                  }
                   placeholder="Select status"
                   indicator={<KeyboardArrowDown />}
                   sx={{
@@ -139,8 +174,9 @@ const CreateInvoice = () => {
                     },
                   }}
                 >
-                  <Option value="dog">draft</Option>
-                  <Option value="cat">sent</Option>
+                   <Option value="sent">sent</Option>
+                  <Option value="draft">draft</Option>
+
                 </Select>
                 <FormHelperText></FormHelperText>
               </FormControl>
@@ -150,9 +186,9 @@ const CreateInvoice = () => {
                 <FormLabel>Date</FormLabel>
                 <Input
                   type="date"
-                  value={values.phone}
+                  value={values.date}
                   onChange={(event) =>
-                    setValues({ ...values, phone: event.target.value })
+                    setValues({ ...values, date: event.target.value })
                   }
                 />
                 <FormHelperText></FormHelperText>
@@ -163,9 +199,9 @@ const CreateInvoice = () => {
                 <FormLabel>Expire Date</FormLabel>
                 <Input
                   type="date"
-                  value={values.phone}
+                  value={values.expireDate}
                   onChange={(event) =>
-                    setValues({ ...values, phone: event.target.value })
+                    setValues({ ...values, expireDate: event.target.value })
                   }
                 />
                 <FormHelperText></FormHelperText>
@@ -176,9 +212,9 @@ const CreateInvoice = () => {
                 <FormLabel>Note</FormLabel>
                 <Input
                   type="text"
-                  value={values.phone}
+                  value={values.note}
                   onChange={(event) =>
-                    setValues({ ...values, phone: event.target.value })
+                    setValues({ ...values, note: event.target.value })
                   }
                 />
                 <FormHelperText></FormHelperText>
@@ -191,12 +227,12 @@ const CreateInvoice = () => {
             {/* Another Grid Item that spans 2 columns */}
             <Grid item xs={12} sm={3}>
               <FormControl fullWidth>
-                <FormLabel>Package</FormLabel>
+                <FormLabel>Service</FormLabel>
                 <Input
                   type="text"
-                  value={values.phone}
+                  value={values.service}
                   onChange={(event) =>
-                    setValues({ ...values, phone: event.target.value })
+                    setValues({ ...values, service: event.target.value })
                   }
                 />
                 <FormHelperText></FormHelperText>
@@ -231,8 +267,8 @@ const CreateInvoice = () => {
                     },
                   }}
                 >
-                  <Option value="dog">Monthly</Option>
-                  <Option value="cat">Yearly</Option>
+                  <Option value="monthly" selected={personData?.serviceType=="monthly"}>Monthly</Option>
+                  <Option value="yearly" selected={personData?.serviceType=="yearly"}>Yearly</Option>
                 </Select>
                 <FormHelperText></FormHelperText>
               </FormControl>
@@ -242,9 +278,9 @@ const CreateInvoice = () => {
                 <FormLabel>Price</FormLabel>
                 <Input
                   type="number"
-                  value={values.phone}
+                  defaultValue={personData?.price}
                   onChange={(event) =>
-                    setValues({ ...values, phone: event.target.value })
+                    setValues({ ...values, price: event.target.value })
                   }
                 />
                 <FormHelperText></FormHelperText>
@@ -270,9 +306,9 @@ const CreateInvoice = () => {
                 <label htmlFor="">Sub Total : </label>
                 <Input
                   type="number"
-                  value={values.phone}
+                  value={values.subTotal}
                   onChange={(event) =>
-                    setValues({ ...values, phone: event.target.value })
+                    setValues({ ...values, subTotal: event.target.value })
                   }
                 />
               </div>
@@ -282,9 +318,9 @@ const CreateInvoice = () => {
 
                 <Input
                   type="text"
-                  value={values.phone}
+                  value={values.vat}
                   onChange={(event) =>
-                    setValues({ ...values, phone: event.target.value })
+                    setValues({ ...values, vat: event.target.value })
                   }
                 />
                 <FormHelperText></FormHelperText>
@@ -293,9 +329,9 @@ const CreateInvoice = () => {
                 {/* <FormLabel>Package</FormLabel> */}
                 <Input
                   type="text"
-                  value={values.phone}
+                  value={values.vatPrice}
                   onChange={(event) =>
-                    setValues({ ...values, phone: event.target.value })
+                    setValues({ ...values, vatPrice: event.target.value })
                   }
                 />
                 <FormHelperText></FormHelperText>
@@ -305,10 +341,10 @@ const CreateInvoice = () => {
                 <label htmlFor="">Total : </label>
                 <Input
                   type="number"
-                  value={values.phone}
+                  value={values.total}
                   onChange={(event) =>
-                    setValues({ ...values, phone: event.target.value })
-                  }
+                    setValues({ ...values, total: event.target.value })
+                  } 
                 />
               </div>
             </div>

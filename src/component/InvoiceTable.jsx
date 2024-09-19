@@ -11,6 +11,7 @@ import { Typography } from '@mui/material';
 import Button from '@mui/joy/Button';
 import Input from '@mui/joy/Input';
 import AddNewCustomer from './AddNewCustomer';
+import { useNavigate } from 'react-router-dom';
 
 function createData(name, calories, fat, carbs, protein) {
   return { name, calories, fat, carbs, protein };
@@ -28,6 +29,7 @@ export default function InvoiceTable() {
 
 
     const [state, setState] = React.useState(false);
+    const navigate = useNavigate();
 
     const toggleDrawer = (inOpen) => (event) => {
         if (event.type === 'keydown' && (event.key === 'Tab' || event.key === 'Shift')) {
@@ -37,7 +39,7 @@ export default function InvoiceTable() {
         setState(inOpen);
       };
     const navigateToCreate = () => {
-
+      navigate("/invoice/create")
       };
 
   return (

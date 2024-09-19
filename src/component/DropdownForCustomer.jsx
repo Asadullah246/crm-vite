@@ -9,8 +9,19 @@ import Edit from '@mui/icons-material/Edit';
 import DeleteForever from '@mui/icons-material/DeleteForever';
 import MenuButton from '@mui/joy/MenuButton';
 import Dropdown from '@mui/joy/Dropdown';
+import { deleteData } from '../others/api';
+import toastSuccess from './Alert';
 
-export default function DropdownForCustomer() {
+export default function DropdownForCustomer({id, setFresh, refresh}) {
+
+    const deleteItem = (id) => {
+        deleteData(`/customer/${id}`) // Replace `/items/${id}` with your API endpoint
+          .then(() => {
+            toastSuccess("Successfully deleted")
+            // setData((prev) => prev.filter((item) => item.id !== id));
+          });
+      };
+
   return (
     <Dropdown>
       <MenuButton
@@ -24,14 +35,11 @@ export default function DropdownForCustomer() {
           <ListItemDecorator>
             <Edit />
           </ListItemDecorator>{' '}
-          Edit post
+          Show
         </MenuItem>
-        <MenuItem disabled>
-          <ListItemDecorator />
-          Draft post
-        </MenuItem>
+
         <ListDivider />
-        <MenuItem variant="soft" color="danger">
+        <MenuItem variant="soft" color="danger" onClick={()=>deleteItem(id)}>
           <ListItemDecorator sx={{ color: 'inherit' }}>
             <DeleteForever />
           </ListItemDecorator>{' '}
