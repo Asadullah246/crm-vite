@@ -1,0 +1,40 @@
+.pageLayout{
+    background-color: white;
+    padding: 40px;
+    padding-top: 60px;
+    border-radius: 12px;
+}
+.content-topbar{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 40px;
+}
+.content-title{
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+.mainMenu .css-cveggr-MuiListItemIcon-root{
+min-width: 34px !important;
+}
+.mainMenu .css-cveggr-MuiListItemIcon-root svg {
+    height: 18px;
+    width: auto;
+}
+.mainMenu .MuiListItemText-root span {
+    font-size: 0.95em;
+
+}
+.normalFlex {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+.endFlex {
+    display: flex;
+    justify-content: end;
+    align-items: center;
+    gap: 10px;
+    margin: 10px 0;
+}

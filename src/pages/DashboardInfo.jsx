@@ -1,0 +1,12 @@
+import React from 'react';
+
+const DashboardInfo = () => {
+    return (
+        <div>
+            dashboard info
+            Lorem ipsum dolor sit amet consectetur adipisicing elit. Mollitia sapiente, assumenda perspiciatis voluptate esse a fugiat sed quaerat quis similique sunt ratione corporis nobis quisquam natus nesciunt eos molestias, incidunt iure consectetur. Hic itaque delectus fugiat voluptas laudantium dolorem veniam iste ea? Nobis laborum iure totam nemo atque dolorem eius exercitationem in esse enim quaerat placeat a voluptates cumque quos ut, cum labore iusto, dolorum temporibus magni vitae dolor amet! Explicabo nihil maxime dolorem quod dolore libero repudiandae voluptatibus iure provident officia! Culpa repellat accusamus laborum iste aspernatur magni unde rem, aliquid, non illum assumenda commodi eius id cum in consequuntur veritatis eveniet labore placeat. Sequi sed similique ab architecto cum animi at, adipisci labore porro cumque, nostrum delectus corrupti quia nihil tenetur consequuntur iusto eveniet expedita explicabo vel. Aliquam reiciendis ducimus, sed impedit voluptas, tempora rem id fugit culpa exercitationem perspiciatis hic voluptatibus earum. Quidem temporibus, adipisci, expedita dignissimos debitis praesentium dolor numquam amet nostrum eligendi sed explicabo ut provident eveniet! Error quam officia fugit veniam eum quis doloremque, iste perferendis atque cumque, explicabo incidunt maiores vitae fuga consectetur obcaecati praesentium maxime nemo ab beatae enim sit vero fugiat! Enim natus in quas quaerat officiis inventore similique non asperiores ad ducimus quidem qui nisi unde maiores laborum necessitatibus, consectetur, vel doloremque repudiandae minima suscipit, eius dignissimos facere. Natus odio ratione deleniti distinctio quo dignissimos, dolorem ducimus nisi beatae expedita corporis consectetur, provident veritatis, architecto itaque minima amet tempore perspiciatis magnam. Quidem, rerum odio! Fugit harum similique eaque nam quae beatae deserunt ex, incidunt itaque, earum nesciunt aperiam. Odio labore aliquam similique praesentium fuga qui ipsum dolores tenetur architecto? Alias placeat nihil vitae labore maxime impedit ullam quisquam sit minus ex ipsam dignissimos est et saepe, fugit rerum! Repellat neque possimus cupiditate eos aperiam molestias laudantium, est illo excepturi molestiae.
+        </div>
+    );
+};
+
+export default DashboardInfo;
