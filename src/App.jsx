@@ -12,6 +12,8 @@ import "./styles/style.css"
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import CreateInvoice from "./pages/CreateInvoice";
+import WelcomeTemplate from "./pages/WelcomeTemplate";
+import CreateWelcomeTemplate from "./pages/CreateWelcomeTemplate";
 
 function App() {
 
@@ -25,7 +27,9 @@ function App() {
               <Route path="/" element={<DashboardInfo />} />
               <Route path="customer" element={<Customer />} />
               <Route path="invoice" element={<Invoice />} />
-              <Route path="payments" element={<Payments />} /> 
+              <Route path="payments" element={<Payments />} />
+              <Route path="welcome-template" element={<WelcomeTemplate />} />
+              <Route path="welcome-template/create" element={<CreateWelcomeTemplate />} />
               <Route path="invoice/create" element={<CreateInvoice />} />
             </Route>
           </Routes>

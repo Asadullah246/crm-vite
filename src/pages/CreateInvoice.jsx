@@ -28,7 +28,7 @@ import KeyboardArrowDown from "@mui/icons-material/KeyboardArrowDown";
 
 import { Grid } from "@mui/joy";
 import toastSuccess from "../component/Alert";
-import { getData } from "../others/api";
+import { getData, postData } from "../others/api";
 // import AddNewCustomer from './AddNewCustomer';
 
 const CreateInvoice = () => {
@@ -58,10 +58,14 @@ const CreateInvoice = () => {
 
   const handleInvoiceCreate = (e) => {
     e?.prevent?.default();
-    console.log("click");
-    toastSuccess("Successfully done");
+    const invoiceData={...values,clientId:personData?._id}
+    postData('/invoice', invoiceData)
+      .then((response) => {
+        toastSuccess("Successfully invoice created")
+        console.log("post res", response);
+      });
   };
-console.log("persondata", personData);
+
   return (
     <div className="pageLayout">
       <div className="content-topbar">
@@ -243,9 +247,9 @@ console.log("persondata", personData);
                 <FormLabel>Description</FormLabel>
                 <Input
                   type="text"
-                  value={values.phone}
+                  value={values.description}
                   onChange={(event) =>
-                    setValues({ ...values, phone: event.target.value })
+                    setValues({ ...values, description: event.target.value })
                   }
                 />
                 <FormHelperText></FormHelperText>
@@ -255,7 +259,11 @@ console.log("persondata", personData);
               <FormControl fullWidth>
                 <FormLabel>package Type</FormLabel>
                 <Select
-                  placeholder="Select status"
+                 onChange={(event, newValue) =>{
+                  setValues({ ...values, serviceType: newValue })
+                }
+                }
+                  placeholder="Select package"
                   indicator={<KeyboardArrowDown />}
                   sx={{
                     width: "100%",
@@ -344,7 +352,7 @@ console.log("persondata", personData);
                   value={values.total}
                   onChange={(event) =>
                     setValues({ ...values, total: event.target.value })
-                  } 
+                  }
                 />
               </div>
             </div>

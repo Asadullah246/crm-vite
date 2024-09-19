@@ -11,25 +11,16 @@ import { Typography } from '@mui/material';
 import Button from '@mui/joy/Button';
 import Input from '@mui/joy/Input';
 import AddNewCustomer from './AddNewCustomer';
+import { useNavigate } from 'react-router-dom';
 import { getData } from '../others/api';
 import DropdownForCustomer from './DropdownForCustomer';
 
-function createData(name, calories, fat, carbs, protein) {
-  return { name, calories, fat, carbs, protein };
-}
 
-const rows = [
-  createData('Frozen yoghurt', 159, 6.0, 24, 4.0),
-  createData('Ice cream sandwich', 237, 9.0, 37, 4.3),
-  createData('Eclair', 262, 16.0, 24, 6.0),
-  createData('Cupcake', 305, 3.7, 67, 4.3),
-  createData('Gingerbread', 356, 16.0, 49, 3.9),
-];
-
-export default function BasicTable() {
+export default function PaymentTable() {
 
 
     const [state, setState] = React.useState(false);
+    const navigate = useNavigate();
     const [data, setData] = React.useState([]);
     const [loading, setLoading] = React.useState(false);
     const [refresh, setRefresh] = React.useState(false);
@@ -37,13 +28,14 @@ export default function BasicTable() {
     // Fetch data on component mount
     React.useEffect(() => {
       setLoading(true);
-      getData('/customer') // Replace '/items' with your API endpoint
+      getData('/payment')
         .then((response) => {
           setData(response?.data);
           setLoading(false);
         })
         .catch(() => setLoading(false));
     }, [refresh]);
+
 
     const toggleDrawer = (inOpen) => (event) => {
         if (event.type === 'keydown' && (event.key === 'Tab' || event.key === 'Shift')) {
@@ -53,22 +45,21 @@ export default function BasicTable() {
         setState(inOpen);
       };
 
-      console.log("dta", data);
 
   return (
    <div>
     <AddNewCustomer state={state} setState={setState} toggleDrawer={toggleDrawer} ></AddNewCustomer>
     <div className='content-topbar'>
-        <div className='content-title' >
+        <div className='content-title'>
            <ArrowBackIcon/>
            <Typography variant="h6" component="h6" style={{fontWeight:"bold"}} >
-        Customers
+        Invoices
       </Typography>
         </div>
         <div className='content-title'>
         <Input size="md" placeholder="Search" />;
-        <Button size="md" variant={"solid"} color="primary" onClick={toggleDrawer(true)}>
-          Add New Person
+        <Button size="md" variant={"outlined"} color="primary" onClick={()=>setRefresh(!refresh)}>
+          Refresh
         </Button>
         {/* <Button size="md" variant={"solid"} color="primary"  onClick={()=>toggleDrawer("right", true)}>
             {"right"}
@@ -79,36 +70,32 @@ export default function BasicTable() {
       <Table sx={{ minWidth: "100%", width:"100%" }} aria-label="simple table">
         <TableHead>
           <TableRow>
-            <TableCell>ID</TableCell>
-            <TableCell>Name</TableCell>
-            <TableCell align="right">email</TableCell>
-            <TableCell align="right">Address</TableCell>
-            <TableCell align="right">phone</TableCell>
-            <TableCell align="right">Postal Code</TableCell>
-            <TableCell align="right">Service Type</TableCell>
-            <TableCell align="right">Price</TableCell>
-            <TableCell align="right">Payment</TableCell>
-            <TableCell align="right">Manage</TableCell>
+            <TableCell>Number</TableCell>
+            <TableCell align="right">Client</TableCell>
+            <TableCell align="right">Amount</TableCell>
+            <TableCell align="right">Date</TableCell>
+            <TableCell align="right">year</TableCell>
+            <TableCell align="right">Payment Mode</TableCell>
+            <TableCell align="right">Action</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
           {data?.map((row) => (
             <TableRow
-              key={row?._id}
+              key={row?.name}
               sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
             >
               <TableCell component="th" scope="row">
-                {row?.randomId}
+                {row?.number}
               </TableCell>
-              <TableCell align="right">{row?.name}</TableCell>
-              <TableCell align="right">{row?.email}</TableCell>
-              <TableCell align="right">{row?.address}</TableCell>
-              <TableCell align="right">{row?.phone}</TableCell>
-              <TableCell align="right">{row?.postalCode}</TableCell>
-              <TableCell align="right">{row?.serviceType}</TableCell>
-              <TableCell align="right">{row?.price}</TableCell>
+              <TableCell align="right">{row?.client}</TableCell>
+              <TableCell align="right">{row?.date}</TableCell>
+              <TableCell align="right">{row?.expireDate}</TableCell>
+              <TableCell align="right">{row?.total}</TableCell>
+              <TableCell align="right">{row?.paid}</TableCell>
+              <TableCell align="right">{row?.status}</TableCell>
               <TableCell align="right">{row?.payment}</TableCell>
-              <TableCell align="right"><DropdownForCustomer id={row?._id} setRefresh={setRefresh} refresh={refresh} api={"customer"} /></TableCell>
+              <TableCell align="right"><DropdownForCustomer id={row?._id} setRefresh={setRefresh} refresh={refresh} api={"payment"} /></TableCell>
             </TableRow>
           ))}
         </TableBody>

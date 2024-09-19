@@ -12,24 +12,28 @@ import Button from '@mui/joy/Button';
 import Input from '@mui/joy/Input';
 import AddNewCustomer from './AddNewCustomer';
 import { useNavigate } from 'react-router-dom';
-
-function createData(name, calories, fat, carbs, protein) {
-  return { name, calories, fat, carbs, protein };
-}
-
-const rows = [
-  createData('Frozen yoghurt', 159, 6.0, 24, 4.0),
-  createData('Ice cream sandwich', 237, 9.0, 37, 4.3),
-  createData('Eclair', 262, 16.0, 24, 6.0),
-  createData('Cupcake', 305, 3.7, 67, 4.3),
-  createData('Gingerbread', 356, 16.0, 49, 3.9),
-];
+import { getData } from '../others/api';
+import DropdownForCustomer from './DropdownForCustomer';
 
 export default function InvoiceTable() {
 
-
     const [state, setState] = React.useState(false);
     const navigate = useNavigate();
+    const [data, setData] = React.useState([]);
+    const [loading, setLoading] = React.useState(false);
+    const [refresh, setRefresh] = React.useState(false);
+
+    // Fetch data on component mount
+    React.useEffect(() => {
+      setLoading(true);
+      getData('/invoice')
+        .then((response) => {
+          setData(response?.data);
+          setLoading(false);
+        })
+        .catch(() => setLoading(false));
+    }, [refresh]);
+
 
     const toggleDrawer = (inOpen) => (event) => {
         if (event.type === 'keydown' && (event.key === 'Tab' || event.key === 'Shift')) {
@@ -41,6 +45,8 @@ export default function InvoiceTable() {
     const navigateToCreate = () => {
       navigate("/invoice/create")
       };
+
+      console.log("in", data);
 
   return (
    <div>
@@ -66,26 +72,34 @@ export default function InvoiceTable() {
       <Table sx={{ minWidth: "100%", width:"100%" }} aria-label="simple table">
         <TableHead>
           <TableRow>
-            <TableCell>Dessert (100g serving)</TableCell>
-            <TableCell align="right">Calories</TableCell>
-            <TableCell align="right">Fat&nbsp;(g)</TableCell>
-            <TableCell align="right">Carbs&nbsp;(g)</TableCell>
-            <TableCell align="right">Protein&nbsp;(g)</TableCell>
+            <TableCell>Number</TableCell>
+            <TableCell align="right">Client</TableCell>
+            <TableCell align="right">Date</TableCell>
+            <TableCell align="right">Expire Date</TableCell>
+            <TableCell align="right">Total</TableCell>
+            <TableCell align="right">Paid</TableCell>
+            <TableCell align="right">Status</TableCell>
+            <TableCell align="right">Payment</TableCell>
+            <TableCell align="right">Action</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
-          {rows.map((row) => (
+          {data?.map((row) => (
             <TableRow
-              key={row.name}
+              key={row?.name}
               sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
             >
               <TableCell component="th" scope="row">
-                {row.name}
+                {row?.number}
               </TableCell>
-              <TableCell align="right">{row.calories}</TableCell>
-              <TableCell align="right">{row.fat}</TableCell>
-              <TableCell align="right">{row.carbs}</TableCell>
-              <TableCell align="right">{row.protein}</TableCell>
+              <TableCell align="right">{row?.client}</TableCell>
+              <TableCell align="right">{row?.date}</TableCell>
+              <TableCell align="right">{row?.expireDate}</TableCell>
+              <TableCell align="right">{row?.total}</TableCell>
+              <TableCell align="right">{row?.paid}</TableCell>
+              <TableCell align="right">{row?.status}</TableCell>
+              <TableCell align="right">{row?.payment}</TableCell>
+              <TableCell align="right"><DropdownForCustomer id={row?._id} setRefresh={setRefresh} refresh={refresh} api={"invoice"} /></TableCell>
             </TableRow>
           ))}
         </TableBody>

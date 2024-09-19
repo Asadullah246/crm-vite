@@ -12,13 +12,14 @@ import Dropdown from '@mui/joy/Dropdown';
 import { deleteData } from '../others/api';
 import toastSuccess from './Alert';
 
-export default function DropdownForCustomer({id, setFresh, refresh}) {
+export default function DropdownForCustomer({id, setRefresh, refresh, api}) {
 
     const deleteItem = (id) => {
-        deleteData(`/customer/${id}`) // Replace `/items/${id}` with your API endpoint
+        deleteData(`/${api}/${id}`) // Replace `/items/${id}` with your API endpoint
           .then(() => {
+            setRefresh(!refresh)
             toastSuccess("Successfully deleted")
-            // setData((prev) => prev.filter((item) => item.id !== id));
+
           });
       };
 
