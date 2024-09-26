@@ -15,6 +15,8 @@ import CreateInvoice from "./pages/CreateInvoice";
 import WelcomeTemplate from "./pages/WelcomeTemplate";
 import CreateWelcomeTemplate from "./pages/CreateWelcomeTemplate";
 import EditTemplate from "./pages/EditTemplate";
+import UploadCustomer from "./pages/Test";
+// import UploadCustomer from "./pages/UploadCustomer";
 
 function App() {
 
@@ -33,6 +35,8 @@ function App() {
               <Route path="Template/create" element={<CreateWelcomeTemplate />} />
               <Route path="invoice/create" element={<CreateInvoice />} />
               <Route path="template/edit/:id" element={<EditTemplate />} />
+              {/* <Route path="upload-customer" element={<UploadCustomer />} /> */}
+              <Route path="upload-customer" element={<UploadCustomer />} />
             </Route>
           </Routes>
         </Router>

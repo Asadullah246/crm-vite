@@ -13,6 +13,7 @@ import Input from '@mui/joy/Input';
 import AddNewCustomer from './AddNewCustomer';
 import { getData } from '../others/api';
 import DropdownForCustomer from './DropdownForCustomer';
+import {  useNavigate } from 'react-router-dom';
 
 
 
@@ -23,6 +24,7 @@ export default function BasicTable() {
     const [data, setData] = React.useState([]);
     const [loading, setLoading] = React.useState(false);
     const [refresh, setRefresh] = React.useState(false);
+    const navigate=useNavigate();
 
     // Fetch data on component mount
     React.useEffect(() => {
@@ -56,9 +58,12 @@ export default function BasicTable() {
       </Typography>
         </div>
         <div className='content-title'>
-        <Input size="md" placeholder="Search" />;
+        <Input size="md" placeholder="Search" />
         <Button size="md" variant={"solid"} color="primary" onClick={toggleDrawer(true)}>
-          Add New Person
+          Add New Customer
+        </Button>
+        <Button size="md" variant={"outlined"} color="primary" onClick={()=>navigate("/upload-customer")}>
+          Upload Customer
         </Button>
         {/* <Button size="md" variant={"solid"} color="primary"  onClick={()=>toggleDrawer("right", true)}>
             {"right"}

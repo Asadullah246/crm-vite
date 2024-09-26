@@ -76,12 +76,12 @@ const DashboardInfo = () => {
 
 
         </Grid>
-        <div style={{marginTop:"60px"}}></div> 
+        <div style={{marginTop:"60px"}}></div>
         <Grid container spacing={4}>
           <Grid item xs={12} sm={6} >
             <ChartsOverviewDemo/>
           </Grid>
-          <Grid item xs={12} sm={6} >
+          <Grid item xs={12} sm={6} > 
             <BasicPie/>
           </Grid>
 
