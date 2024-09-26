@@ -32,7 +32,7 @@ export default function AddNewCustomer({ state, toggleDrawer }) {
 
   const handleForm = (e) => {
     e?.prevent?.default();
-    const data={...values, randomId:generateHeatingId()} 
+    const data={...values, randomId:generateHeatingId()}
     postData('/customer', data) // Replace '/items' with your API endpoint
       .then((response) => {
         // setData((prev) => [...prev, response]);
