@@ -18,7 +18,15 @@ import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 import { Link, Outlet } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
-import logo from "../assets/lifeLogo.svg"
+import logo from "../assets/lifeLogo.svg";
+import Badge from "@mui/joy/Badge";
+import { Button } from "@mui/joy";
+import { getData } from "../others/api";
+import Dropdown from "@mui/joy/Dropdown";
+import Menu from "@mui/joy/Menu";
+import MenuButton from "@mui/joy/MenuButton";
+import MenuItem from "@mui/joy/MenuItem";
+import DoneIcon from '@mui/icons-material/Done';
 
 const drawerWidth = 240;
 
@@ -27,6 +35,50 @@ function Dashboard(props) {
   const [mobileOpen, setMobileOpen] = React.useState(false);
   const [isClosing, setIsClosing] = React.useState(false);
   const [tab, setTab] = React.useState("Dashboard");
+
+  const [customers, setCustomers] = React.useState([]);
+  const [loading, setLoading] = React.useState(false);
+  const [refresh, setRefresh] = React.useState(false);
+  const [old, setOld] = React.useState([]);
+
+  // Fetch data on component mount
+  React.useEffect(() => {
+    setLoading(true);
+    getData("/customer")
+      .then((response) => {
+        setCustomers(response?.data);
+        setLoading(false);
+      })
+      .catch(() => setLoading(false));
+  }, [refresh]);
+
+  React.useEffect(() => {
+    const currentDate = new Date();
+
+    // Function to filter and sort customers
+    const filterAndSortCustomers = (data) => {
+      const threeMonthsAgo = new Date();
+      threeMonthsAgo.setMonth(currentDate.getMonth() - 3);
+
+      // Filter customers with startingDate 3 months or more before the current date
+      const filteredCustomers = data.filter((customer) => {
+        const startingDate = new Date(customer.startingDate);
+        return startingDate <= threeMonthsAgo;
+      });
+
+      // Sort customers by the distance of startingDate from the current date
+      filteredCustomers.sort((a, b) => {
+        return new Date(a.startingDate) - new Date(b.startingDate);
+      });
+
+      return filteredCustomers;
+    };
+
+    // Get the filtered and sorted customer data
+    const sortedCustomers = filterAndSortCustomers(customers);
+    console.log("sorted", sortedCustomers);
+    setOld(sortedCustomers);
+  }, [customers]);
 
   const handleDrawerClose = () => {
     setIsClosing(true);
@@ -47,25 +99,45 @@ function Dashboard(props) {
     <div style={{ backgroundColor: "#F4F7FB" }} className="mainMenu">
       {/* <Toolbar style={{ backgroundColor: "#F4F7FB" }} /> */}
       {/* <Divider style={{  backgroundColor:"#F4F7FB"}} /> */}
-     <div style={{paddingLeft:"32px", paddingTop:"20px", display:"flex", alignItems:"center", gap:"10px", marginBottom:"20px"}}>
-      <img src={logo} alt="Logo" style={{height:40, width: "auto"}} />
-     <Typography variant="h6" component="h6" style={{fontWeight:600}} >
-        Heating4Life
-      </Typography>
-     </div>
+      <div
+        style={{
+          paddingLeft: "32px",
+          paddingTop: "20px",
+          display: "flex",
+          alignItems: "center",
+          gap: "10px",
+          marginBottom: "20px",
+        }}
+      >
+        <img src={logo} alt="Logo" style={{ height: 40, width: "auto" }} />
+        <Typography variant="h6" component="h6" style={{ fontWeight: 600 }}>
+          Heating4Life
+        </Typography>
+      </div>
       <List>
-        {["Dashboard", "Customer", "Invoice","Template", "Payments"].map((text, index) => (
-          <Link to={text == "Dashboard" ? "/" : text} key={text} style={{padding:0}}>
-            <ListItem  style={{paddingTop:5, paddingBottom:5}}>
-              <ListItemButton  style={{paddingTop:0, paddingBottom:0, gap:0}}>
-                <ListItemIcon style={{fontSize:"0.7em !important"}}>
-                  {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-                </ListItemIcon>
-                <ListItemText primary={text}  style={{fontSize:"0.7em !important"}}/>
-              </ListItemButton>
-            </ListItem>
-          </Link>
-        ))}
+        {["Dashboard", "Customer", "Invoice", "Template", "Payments"].map(
+          (text, index) => (
+            <Link
+              to={text == "Dashboard" ? "/" : text}
+              key={text}
+              style={{ padding: 0 }}
+            >
+              <ListItem style={{ paddingTop: 5, paddingBottom: 5 }}>
+                <ListItemButton
+                  style={{ paddingTop: 0, paddingBottom: 0, gap: 0 }}
+                >
+                  <ListItemIcon style={{ fontSize: "0.7em !important" }}>
+                    {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
+                  </ListItemIcon>
+                  <ListItemText
+                    primary={text}
+                    style={{ fontSize: "0.7em !important" }}
+                  />
+                </ListItemButton>
+              </ListItem>
+            </Link>
+          )
+        )}
       </List>
       {/* <Divider /> */}
     </div>
@@ -77,31 +149,70 @@ function Dashboard(props) {
 
   return (
     <Box sx={{ display: "flex", backgroundColor: "#F4F7FB" }}>
-
-
       <CssBaseline style={{ backgroundColor: "#F4F7FB" }} />
       <AppBar
         position="fixed"
         sx={{
           width: { sm: `calc(100% - ${drawerWidth}px)` },
           ml: { sm: `${drawerWidth}px` },
-          display: { xs: "block", sm: "none" },
+          display: {
+            xs: "block",
+            // sm: "none"
+          },
           backgroundColor: "#F4F7FB",
         }}
       >
-        <Toolbar style={{ backgroundColor: "#F4F7FB" }}>
-          <IconButton
-            color="inherit"
-            aria-label="open drawer"
-            edge="start"
-            onClick={handleDrawerToggle}
-            sx={{ mr: 2, display: { sm: "none" } }}
-          >
-            <MenuIcon />
-          </IconButton>
-          <Typography variant="h6" noWrap component="div">
-            Heating4Life
-          </Typography>
+        <Toolbar style={{ backgroundColor: "#F4F7FB", boxShadow: "none" }}>
+          <div style={{ width: "100%" }} className="normalFlexWithSpaceBetween">
+            <div>
+              <IconButton
+                color="inherit"
+                aria-label="open drawer"
+                edge="start"
+                onClick={handleDrawerToggle}
+                sx={{ mr: 2, display: { sm: "none" } }}
+              >
+                <MenuIcon />
+              </IconButton>
+
+              <Typography
+                variant="h4"
+                noWrap
+                style={{ color: "#FE6F28" }}
+                component="div"
+              >
+                Hi, Asadullah
+              </Typography>
+            </div>
+            <div
+              className="normalFlex gap-15"
+              style={{ color: "black", gap: "10px" }}
+            >
+              <Dropdown>
+                <MenuButton
+                slotProps={{ root: { variant: 'plain', color: 'neutral' } }}
+                sx={{border:"none" }}
+                >
+                <Badge badgeContent={old?.length} variant="soft">
+                <Typography sx={{ fontSize: "xl" }}>💌</Typography>
+              </Badge>
+                </MenuButton>
+                <Menu style={{maxHeight:"70vh", overflow:"auto",  borderRadius:"10px", padding:"20px"}}>
+                  {
+                    old?.map((c,index)=>{
+                      return (
+                        <MenuItem key={index} sx={{borderBottom:"1px solid #D6D9DC", fontWeight:c?.freeSR?"400":"700"}}>{c?.name}, {c?.startingDate}</MenuItem>
+                      )
+                    })
+                  }
+
+                </Menu>
+              </Dropdown>
+
+
+              <Button variant="soft">Log out</Button>
+            </div>
+          </div>
         </Toolbar>
       </AppBar>
       <Box
@@ -150,6 +261,7 @@ function Dashboard(props) {
         sx={{
           flexGrow: 1,
           p: 3,
+          paddingTop: "50px",
           width: { sm: `calc(100% - ${drawerWidth}px)` },
           backgroundColor: "#F4F7FB",
         }}

@@ -1,3 +1,11 @@
+
+
+
+
+header {
+    box-shadow: none !important;
+}
+
 .pageLayout{
     background-color: white;
     padding: 40px;
@@ -31,10 +39,19 @@ min-width: 34px !important;
     align-items: center;
     gap: 10px;
 }
+.normalFlexWithSpaceBetween {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
 .endFlex {
     display: flex;
     justify-content: end;
     align-items: center;
     gap: 10px;
     margin: 10px 0;
+}
+.gap-15 {
+    display: flex;
+    gap: 25px !important; 
 }
