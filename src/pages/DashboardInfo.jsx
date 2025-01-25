@@ -55,18 +55,18 @@ const DashboardInfo = () => {
            <h2 style={{margin:"0", padding:"0", color:"white", fontSize:"2.5em"}}>20</h2>
             </div>
           </Grid>
-          <Grid item xs={12} sm={3} >
+          {/* <Grid item xs={12} sm={3} >
             <div style={{backgroundColor:"#FF9060",padding:"30px 25px", borderRadius:"12px"}}>
-            <p style={{margin:"0", padding:"0", color:"white"}}>Last Month</p>
+            <p style={{margin:"0", padding:"0", color:"white"}}>Active customers</p>
            <h2 style={{margin:"0", padding:"0", color:"white", fontSize:"2.5em"}}>$1000</h2>
             </div>
-          </Grid>
-          <Grid item xs={12} sm={3} >
+          </Grid> */}
+          {/* <Grid item xs={12} sm={3} >
             <div style={{backgroundColor:"#3ACBE9",padding:"30px 25px", borderRadius:"12px"}}>
             <p style={{margin:"0", padding:"0", color:"white"}}>Last Year</p>
            <h2 style={{margin:"0", padding:"0", color:"white", fontSize:"2.5em"}}>$30000</h2>
             </div>
-          </Grid>
+          </Grid> */}
           <Grid item xs={12} sm={3} >
             <div style={{backgroundColor:"#48C99D",padding:"30px 25px", borderRadius:"12px"}}>
             <p style={{margin:"0", padding:"0", color:"white"}}>Packages</p>
@@ -81,7 +81,7 @@ const DashboardInfo = () => {
           <Grid item xs={12} sm={6} >
             <ChartsOverviewDemo/>
           </Grid>
-          <Grid item xs={12} sm={6} > 
+          <Grid item xs={12} sm={6} >
             <BasicPie/>
           </Grid>
 

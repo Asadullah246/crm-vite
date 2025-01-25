@@ -41,7 +41,7 @@ export default function DropdownForCustomer({id, setRefresh, refresh, api, show}
             <Edit />
           </ListItemDecorator>{' '}
           Show
-        </MenuItem>
+        </MenuItem> 
 
         <ListDivider />
         <MenuItem variant="soft" color="danger" onClick={()=>deleteItem(id)}>

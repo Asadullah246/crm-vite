@@ -16,6 +16,10 @@ import WelcomeTemplate from "./pages/WelcomeTemplate";
 import CreateWelcomeTemplate from "./pages/CreateWelcomeTemplate";
 import EditTemplate from "./pages/EditTemplate";
 import UploadCustomer from "./pages/Test";
+import SignUp from "./pages/SignUp";
+import SignaturePage from "./pages/Signature";
+import Profile from "./pages/Profile";
+import ProductService from "./pages/ProductService";
 // import UploadCustomer from "./pages/UploadCustomer";
 
 function App() {
@@ -29,15 +33,20 @@ function App() {
               {/* Nested Routes inside Dashboard */}
               <Route path="/" element={<DashboardInfo />} />
               <Route path="customer" element={<Customer />} />
+              <Route path="product" element={<ProductService />} />
               <Route path="invoice" element={<Invoice />} />
               <Route path="payments" element={<Payments />} />
+              <Route path="Signature" element={<SignaturePage />} />
+              <Route path="Profile" element={<Profile />} />
               <Route path="Template" element={<WelcomeTemplate />} />
               <Route path="Template/create" element={<CreateWelcomeTemplate />} />
               <Route path="invoice/create" element={<CreateInvoice />} />
               <Route path="template/edit/:id" element={<EditTemplate />} />
-              {/* <Route path="upload-customer" element={<UploadCustomer />} /> */}
               <Route path="upload-customer" element={<UploadCustomer />} />
             </Route>
+
+            <Route path="/signup" element={<SignUp />} />
+
           </Routes>
         </Router>
       </div>

@@ -46,7 +46,7 @@ const UploadCustomer = () => {
   // Function to generate a random heating ID
   const generateHeatingId = () => {
     const randomNumber = Math.floor(Math.random() * 10000); // Generate a random number
-    const heatingId = `Heating${randomNumber}`; // Concatenate "Heating" with the random number
+    const heatingId = `AMSI${randomNumber}`; // Concatenate "Heating" with the random number
     return heatingId;
   };
 

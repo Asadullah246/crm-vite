@@ -18,7 +18,7 @@ import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 import { Link, Outlet } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
-import logo from "../assets/lifeLogo.svg";
+import logo from "../assets/amsi-logo.png";
 import Badge from "@mui/joy/Badge";
 import { Button } from "@mui/joy";
 import { getData } from "../others/api";
@@ -27,6 +27,7 @@ import Menu from "@mui/joy/Menu";
 import MenuButton from "@mui/joy/MenuButton";
 import MenuItem from "@mui/joy/MenuItem";
 import DoneIcon from '@mui/icons-material/Done';
+import adsation from "../assets/adsation.png"
 
 const drawerWidth = 240;
 
@@ -61,23 +62,26 @@ function Dashboard(props) {
       threeMonthsAgo.setMonth(currentDate.getMonth() - 3);
 
       // Filter customers with startingDate 3 months or more before the current date
-      const filteredCustomers = data.filter((customer) => {
+      const filteredCustomers = data?.filter((customer) => {
         const startingDate = new Date(customer.startingDate);
         return startingDate <= threeMonthsAgo;
       });
 
       // Sort customers by the distance of startingDate from the current date
-      filteredCustomers.sort((a, b) => {
-        return new Date(a.startingDate) - new Date(b.startingDate);
+      filteredCustomers?.sort((a, b) => {
+        return new Date(a.startingDate) - new Date(b?.startingDate);
       });
 
       return filteredCustomers;
     };
 
     // Get the filtered and sorted customer data
-    const sortedCustomers = filterAndSortCustomers(customers);
-    console.log("sorted", sortedCustomers);
-    setOld(sortedCustomers);
+    if(customers?.length>0){
+      const sortedCustomers = filterAndSortCustomers(customers);
+      console.log("sorted", sortedCustomers);
+      setOld(sortedCustomers);
+    }
+
   }, [customers]);
 
   const handleDrawerClose = () => {
@@ -111,11 +115,11 @@ function Dashboard(props) {
       >
         <img src={logo} alt="Logo" style={{ height: 40, width: "auto" }} />
         <Typography variant="h6" component="h6" style={{ fontWeight: 600 }}>
-          Heating4Life
+          AMSI
         </Typography>
       </div>
       <List>
-        {["Dashboard", "Customer", "Invoice", "Template", "Payments"].map(
+        {["Dashboard", "Customer","product", "Invoice", "Template","payments","Signature","Profile"].map( 
           (text, index) => (
             <Link
               to={text == "Dashboard" ? "/" : text}

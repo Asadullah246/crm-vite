@@ -10,15 +10,14 @@ import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import { Typography } from '@mui/material';
 import Button from '@mui/joy/Button';
 import Input from '@mui/joy/Input';
-import AddNewCustomer from './AddNewCustomer';
 import { getData } from '../others/api';
 import DropdownForCustomer from './DropdownForCustomer';
 import {  useNavigate } from 'react-router-dom';
-import { fetchData } from '../others/common';
+import AddNewProduct from './AddNewProduct';
 
 
 
-export default function BasicTable() {
+export default function ProductServiceTable() {
 
 
     const [state, setState] = React.useState(false);
@@ -28,16 +27,15 @@ export default function BasicTable() {
     const navigate=useNavigate();
 
     // Fetch data on component mount
-    // React.useEffect(() => {
-    //   setLoading(true);
-    //   fetchData('/customer') // Replace '/items' with your API endpoint
-    //     .then((response) => {
-    //       console.log("res", response);
-    //       setData(response?.data);
-    //       setLoading(false);
-    //     })
-    //     .catch(() => setLoading(false));
-    // }, [refresh]);
+    React.useEffect(() => {
+      setLoading(true);
+      getData('/product') // Replace '/items' with your API endpoint
+        .then((response) => {
+          setData(response?.data);
+          setLoading(false);
+        })
+        .catch(() => setLoading(false));
+    }, [refresh]);
 
     const toggleDrawer = (inOpen) => (event) => {
         if (event.type === 'keydown' && (event.key === 'Tab' || event.key === 'Shift')) {
@@ -51,21 +49,21 @@ export default function BasicTable() {
 
   return (
    <div>
-    <AddNewCustomer state={state} setState={setState} toggleDrawer={toggleDrawer} ></AddNewCustomer>
+    <AddNewProduct state={state} setState={setState} toggleDrawer={toggleDrawer} ></AddNewProduct>
     <div className='content-topbar'>
         <div className='content-title' >
            <ArrowBackIcon/>
            <Typography variant="h6" component="h6" style={{fontWeight:"bold"}} >
-           Customers
+        Product/Services
       </Typography>
         </div>
         <div className='content-title'>
         <Input size="md" placeholder="Search" />
         <Button size="md" variant={"solid"} color="primary" onClick={toggleDrawer(true)}>
-          Add New Customer
+          Add New
         </Button>
         <Button size="md" variant={"outlined"} color="primary" onClick={()=>navigate("/upload-customer")}>
-          Upload Customers
+          Upload 
         </Button>
         {/* <Button size="md" variant={"solid"} color="primary"  onClick={()=>toggleDrawer("right", true)}>
             {"right"}

@@ -46,7 +46,7 @@ const UploadCustomer = () => {
       });
 
       // Filter out any rows with all empty cells
-      const cleanedData = jsonData.filter((row) => row.some((cell) => cell !== ''));
+      const cleanedData = jsonData?.filter((row) => row.some((cell) => cell !== ''));
 
       // Process and convert dates where applicable
       const processedData = cleanedData.map((row) =>

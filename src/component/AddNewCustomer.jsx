@@ -26,7 +26,7 @@ export default function AddNewCustomer({ state, toggleDrawer }) {
 
   function generateHeatingId() {
     const randomNumber = Math.floor(Math.random() * 10000); // Generate a random number
-    const heatingId = `Heating${randomNumber}`; // Concatenate "Heating" with the random number
+    const heatingId = `AMSI${randomNumber}`; // Concatenate "Heating" with the random number
     return heatingId;
   }
 
@@ -226,7 +226,7 @@ export default function AddNewCustomer({ state, toggleDrawer }) {
           onClick={handleForm}
         >
           Submit
-        </Button>
+        </Button> 
       </Stack>
     </Box>
   );
