@@ -5,6 +5,7 @@ import api from "./apiService";
 export const getData = async (endpoint) => {
     try {
       const response = await api.get(endpoint);
+      // console.log("res", response);
       return response.data; // Return the data from the response
     } catch (error) {
       handleError(error);
@@ -25,7 +26,7 @@ export const getData = async (endpoint) => {
   };
 
   // PUT request (for updates)
-  export const updateData = async (endpoint, data) => { 
+  export const updateData = async (endpoint, data) => {
     try {
       const response = await api.patch(endpoint, data);
       return response.data;
@@ -48,12 +49,12 @@ export const getData = async (endpoint) => {
   const handleError = (error) => {
     if (error.response) {
       console.error('API Error:', error.response.data);
-      toastError(`API Error: ${error.response.data.message || 'Something went wrong'}`);
+      // toastError(`API Error: ${error.response.data.message || 'Something went wrong'}`);
     } else if (error.request) {
       console.error('Network Error: No response received');
-      toastError('Network Error: No response received');
+      // toastError('Network Error: No response received');
     } else {
       console.error('Request Setup Error:', error.message);
-      toastError(`Error: ${error.message}`);
+      // toastError(`Error: ${error.message}`);
     }
   };

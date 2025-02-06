@@ -12,8 +12,17 @@ import Option from "@mui/joy/Option";
 import KeyboardArrowDown from "@mui/icons-material/KeyboardArrowDown";
 import { Grid } from "@mui/joy";
 import { getData, postData } from "../others/api";
-import toastSuccess from "./Alert";
+import toastSuccess, { toastError } from "./Alert";
 import { useParams } from "react-router-dom";
+
+import Table from "@mui/material/Table";
+import TableBody from "@mui/material/TableBody";
+import TableCell from "@mui/material/TableCell";
+import TableContainer from "@mui/material/TableContainer";
+import TableHead from "@mui/material/TableHead";
+import TableRow from "@mui/material/TableRow";
+import Paper from "@mui/material/Paper";
+import { createData } from "../others/common";
 // import toastSuccess from "./Alert";
 // import { getData, postData } from "../others/api";
 
@@ -24,69 +33,70 @@ const CreatePayment = () => {
   const [data, setData] = React.useState([]);
   const [loading, setLoading] = React.useState(false);
   const [refresh, setRefresh] = React.useState(false);
-  const [person, setPerson]=React.useState()
-  const [personData, setPersonData]=React.useState()
+  const [person, setPerson] = React.useState();
+  const [personData, setPersonData] = React.useState();
+  const [paymentInfo, setPaymentInfo] = React.useState();
+  const [total, setTotal]=React.useState(0);
 
-  // Fetch data on component mount
   React.useEffect(() => {
+    const controller = new AbortController();
     setLoading(true);
 
-
-
-
-
-  const handleForm = async(e) => {
-    e?.prevent?.default();
-    // const data = { ...values, randomId: generateHeatingId() };
-
-
+    const handleForm = async () => {
       try {
-          const result = await  getData(`/customer/paymentInfo/${id}`); // Wait for the promise to resolve
-          console.log("Customer", result);
-          if (result.status == "success") {
-            toastSuccess("Successfully customer created");
-          }
-        } catch (error) {
-          console.error("Error creating data:", error);
-          // toastError("something went wrong");
+        const result = await getData(`/customer/paymentInfo/${id}`, {
+          signal: controller.signal,
+        });
+        console.log("Customer info", result?.data);
+
+        if (result.status == "success") {
+          setPerson(result?.data?.user);
+          const totalAmount = result?.data?.dues?.reduce((accumulator, currentItem) => {
+            return accumulator + currentItem.totalAmountDue;
+          }, 0);
+          setTotal(totalAmount);
+          setPaymentInfo(result?.data?.dues);
         }
-
-  };
-
-
-    getData(`/customer/paymentInfo/${id}`)
-      .then((response) => {
-        setData(response?.data);
         setLoading(false);
-      })
-      .catch(() => setLoading(false));
-  }, [refresh, id]);
+      } catch (error) {
+        if (error.name !== "AbortError") {
+          console.error("Error fetching data:", error);
+          setLoading(false);
+        }
+      }
+    };
 
+    handleForm();
 
+    return () => controller.abort(); // Cleanup: cancels the request when unmounted
+  }, [id]);
 
-
-
-
-
-  React.useEffect(() => {
-    setLoading(true);
-   const currentPerson=data?.find(s=>s?.name==person)
-   setPersonData(currentPerson)
-  }, [refresh, data, person]);
-
-
-  const handleInvoiceCreate = (e) => {
+  const handleInvoiceCreate = async(e) => {
     e?.prevent?.default();
-    const invoiceData={...values,clientId:personData?._id}
-    postData('/invoice', invoiceData)
-      .then((response) => {
-        toastSuccess("Successfully invoice created")
-        console.log("post res", response);
-      });
+    // const invoiceData = { ...values, clientId: personData?._id };
+    const invoiceData = {
+      customerId: id,
+      paymentsData: paymentInfo,
+      paymentMethod:"Stipe"
+     };
+
+console.log("invoice data", invoiceData);
+
+     try {
+      const result = await createData(invoiceData, "payment"); // Wait for the promise to resolve
+      console.log("payment successfully", result);
+      if (result?.status == "success") {
+        toastSuccess("Successfully payment created");
+
+      }
+    } catch (error) {
+      console.error("Error creating data:", error);
+      toastError("something went wrong");
+    }
   };
 
   return (
-    <div >
+    <div>
       <div className="content-topbar">
         <div className="content-title">
           <ArrowBackIcon />
@@ -95,7 +105,7 @@ const CreatePayment = () => {
             component="h6"
             style={{ fontWeight: "bold" }}
           >
-            New
+            Update payment
           </Typography>
         </div>
         <div className="content-title">
@@ -106,7 +116,7 @@ const CreatePayment = () => {
             color="primary"
             onClick={handleInvoiceCreate}
           >
-            Save
+            Update
           </Button>
           {/* <Button size="md" variant={"solid"} color="primary"  onClick={()=>toggleDrawer("right", true)}>
             {"right"}
@@ -119,39 +129,15 @@ const CreatePayment = () => {
             {/* Grid Item that spans 2 columns */}
             <Grid item xs={12} sm={5}>
               <FormControl fullWidth>
-                <FormLabel>Client</FormLabel>
-                <Select
-                  fullWidth
-                  onChange={(event, newValue) =>{
-                    setPerson(newValue)
-                    setValues({ ...values, client: newValue })
-                  }
-                  }
+                <FormLabel>Name</FormLabel>
+                <FormLabel sx={{ fontWeight: "600" }}>{person?.name}</FormLabel>
 
-                  placeholder=""
-                  indicator={<KeyboardArrowDown />}
-                  sx={{
-                    width: "100%",
-                    [`& .${selectClasses.indicator}`]: {
-                      transition: "0.2s",
-                      [`&.${selectClasses.expanded}`]: {
-                        transform: "rotate(-180deg)",
-                      },
-                    },
-                  }}
-                >
-                  {data?.map(person=>{
-                    return (
-                      <Option key={person?._id} value={person?.name}>{person?.name}</Option>
-                    )
-                  })}
-                </Select>
                 <FormHelperText></FormHelperText>
               </FormControl>
             </Grid>
 
             {/* Another Grid Item that spans 2 columns */}
-            <Grid item xs={12} sm={3}>
+            {/* <Grid item xs={12} sm={3}>
               <FormControl fullWidth>
                 <FormLabel>Number</FormLabel>
                 <Input
@@ -181,10 +167,9 @@ const CreatePayment = () => {
               <FormControl fullWidth>
                 <FormLabel>Status</FormLabel>
                 <Select
-                  onChange={(event, newValue) =>{
-                    setValues({ ...values, status: newValue})
-                  }
-                  }
+                  onChange={(event, newValue) => {
+                    setValues({ ...values, status: newValue });
+                  }}
                   placeholder="Select status"
                   indicator={<KeyboardArrowDown />}
                   sx={{
@@ -197,9 +182,8 @@ const CreatePayment = () => {
                     },
                   }}
                 >
-                   <Option value="sent">sent</Option>
+                  <Option value="sent">sent</Option>
                   <Option value="draft">draft</Option>
-
                 </Select>
                 <FormHelperText></FormHelperText>
               </FormControl>
@@ -242,12 +226,61 @@ const CreatePayment = () => {
                 />
                 <FormHelperText></FormHelperText>
               </FormControl>
-            </Grid>
+            </Grid> */}
           </Grid>
-          <Grid container spacing={2} style={{ marginTop: "40px" }}>
-            {/* Grid Item that spans 2 columns */}
 
-            {/* Another Grid Item that spans 2 columns */}
+
+          <FormLabel sx={{ fontWeight: "600", marginTop:"30px", marginBottom:"20px", fontSize:"1.1em" }}>Due Payments</FormLabel>
+          <TableContainer component={Paper} >
+            <Table
+              sx={{ minWidth: "100%", width: "100%" }}
+              aria-label="simple table"
+            >
+              <TableHead>
+                <TableRow>
+                  {/* <TableCell>ID</TableCell> */}
+                  <TableCell> Product/Service Name</TableCell>
+                  <TableCell align="center">Id</TableCell>
+
+                  <TableCell align="center">Month - Amount</TableCell>
+                  <TableCell align="right">Total Amount</TableCell>
+                  {/* <TableCell align="right">Postal Code</TableCell>
+                  <TableCell align="right">Manage</TableCell> */}
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {paymentInfo?.map((row) => (
+                  <TableRow
+                    key={row?._id}
+                    sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+                  >
+                    <TableCell component="th" scope="row">
+                      {row?.transaction?.productName}
+                    </TableCell>
+                    {/* <TableCell align="right">{row?.name}</TableCell> */}
+                    <TableCell align="center">{row?.transaction?._id.slice(-6)}</TableCell>
+                    <TableCell align="center">
+                      <div >
+                        {row?.dueDetails?.map((due, index)=>{
+                          return (
+                            <div key={index} style={{display:"flex", justifyContent:"space-evenly", alignItems:"center", marginBottom:"10px"}} >
+                              <span>{due?.month}</span>
+                              <span>$ {due?.dueAmount}</span>
+                            </div>
+                          )
+                        })}
+                      </div>
+                    </TableCell>
+                    <TableCell align="right">$ {row?.totalAmountDue}</TableCell>
+                    {/* <TableCell align="right">{row?.city}</TableCell> */}
+
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </TableContainer>
+          {/* <Grid container spacing={2} style={{ marginTop: "40px" }}>
+
             <Grid item xs={12} sm={3}>
               <FormControl fullWidth>
                 <FormLabel>Service</FormLabel>
@@ -278,10 +311,9 @@ const CreatePayment = () => {
               <FormControl fullWidth>
                 <FormLabel>package Type</FormLabel>
                 <Select
-                 onChange={(event, newValue) =>{
-                  setValues({ ...values, serviceType: newValue })
-                }
-                }
+                  onChange={(event, newValue) => {
+                    setValues({ ...values, serviceType: newValue });
+                  }}
                   placeholder="Select package"
                   indicator={<KeyboardArrowDown />}
                   sx={{
@@ -294,8 +326,18 @@ const CreatePayment = () => {
                     },
                   }}
                 >
-                  <Option value="monthly" selected={personData?.serviceType=="monthly"}>Monthly</Option>
-                  <Option value="yearly" selected={personData?.serviceType=="yearly"}>Yearly</Option>
+                  <Option
+                    value="monthly"
+                    selected={personData?.serviceType == "monthly"}
+                  >
+                    Monthly
+                  </Option>
+                  <Option
+                    value="yearly"
+                    selected={personData?.serviceType == "yearly"}
+                  >
+                    Yearly
+                  </Option>
                 </Select>
                 <FormHelperText></FormHelperText>
               </FormControl>
@@ -313,56 +355,55 @@ const CreatePayment = () => {
                 <FormHelperText></FormHelperText>
               </FormControl>
             </Grid>
-          </Grid>
+          </Grid> */}
 
-          <Divider style={{margin:"40px 0"}} />
+          {/* <Divider style={{ margin: "40px 0" }} /> */}
 
-          <div style={{ display: "flex", justifyContent: "space-between" }}>
-          <div>
-          <Button
-              size="md"
-              variant={"solid"}
-              color="primary"
-              onClick={handleInvoiceCreate}
-            >
-              Save
-            </Button>
-          </div>
-            <div style={{textAlign:"end"}}>
+          <div style={{ display: "flex", justifyContent: "space-between", alignItems:"center" }}>
+            <div>
+              <Button
+                size="md"
+                variant={"solid"}
+                color="primary"
+                onClick={handleInvoiceCreate}
+              >
+                Update
+              </Button>
+            </div>
+            <div style={{ textAlign: "end" }}>
               <div className="endFlex">
-                <label htmlFor="">Sub Total : </label>
+              <FormLabel sx={{ fontWeight: "600", marginTop:"30px", marginBottom:"20px", fontSize:"1em" }}>Total : $ {total}</FormLabel>
+                {/* <label htmlFor="">Sub Total : </label>
                 <Input
                   type="number"
                   value={values.subTotal}
                   onChange={(event) =>
                     setValues({ ...values, subTotal: event.target.value })
                   }
-                />
+                /> */}
               </div>
-              <div className="endFlex">
-              <FormLabel>Vat %</FormLabel>
-              <FormControl >
-
-                <Input
-                  type="text"
-                  value={values.vat}
-                  onChange={(event) =>
-                    setValues({ ...values, vat: event.target.value })
-                  }
-                />
-                <FormHelperText></FormHelperText>
-              </FormControl>
-              <FormControl >
-                {/* <FormLabel>Package</FormLabel> */}
-                <Input
-                  type="text"
-                  value={values.vatPrice}
-                  onChange={(event) =>
-                    setValues({ ...values, vatPrice: event.target.value })
-                  }
-                />
-                <FormHelperText></FormHelperText>
-              </FormControl>
+              {/* <div className="endFlex">
+                <FormLabel>Vat %</FormLabel>
+                <FormControl>
+                  <Input
+                    type="text"
+                    value={values.vat}
+                    onChange={(event) =>
+                      setValues({ ...values, vat: event.target.value })
+                    }
+                  />
+                  <FormHelperText></FormHelperText>
+                </FormControl>
+                <FormControl>
+                  <Input
+                    type="text"
+                    value={values.vatPrice}
+                    onChange={(event) =>
+                      setValues({ ...values, vatPrice: event.target.value })
+                    }
+                  />
+                  <FormHelperText></FormHelperText>
+                </FormControl>
               </div>
               <div className="endFlex">
                 <label htmlFor="">Total : </label>
@@ -373,7 +414,7 @@ const CreatePayment = () => {
                     setValues({ ...values, total: event.target.value })
                   }
                 />
-              </div>
+              </div> */}
             </div>
           </div>
         </div>

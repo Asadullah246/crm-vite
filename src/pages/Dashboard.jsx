@@ -78,7 +78,6 @@ function Dashboard(props) {
     // Get the filtered and sorted customer data
     if(customers?.length>0){
       const sortedCustomers = filterAndSortCustomers(customers);
-      console.log("sorted", sortedCustomers);
       setOld(sortedCustomers);
     }
 
@@ -119,7 +118,7 @@ function Dashboard(props) {
         </Typography>
       </div>
       <List>
-        {["Dashboard", "Customer","product", "Invoice", "Template","payments","Signature","Profile"].map( 
+        {["Dashboard", "Customer","product", "Invoice", "Template","payments","Signature","Profile"].map(
           (text, index) => (
             <Link
               to={text == "Dashboard" ? "/" : text}
