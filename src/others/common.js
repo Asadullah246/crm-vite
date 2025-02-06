@@ -424,7 +424,7 @@ export const createData = async (communityData, endpoint) => {
       communityData,
       config
     );
-    console.log("res", response); 
+    console.log("res", response);
     return response.data;
   } catch (error) {
     console.log("error ", error);

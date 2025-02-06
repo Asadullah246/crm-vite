@@ -14,12 +14,13 @@ import FormLabel from "@mui/joy/FormLabel";
 import FormHelperText from "@mui/joy/FormHelperText";
 import Stack from "@mui/joy/Stack";
 import InfoOutlined from "@mui/icons-material/InfoOutlined";
-import AlertMessage from "./Alert";
+import AlertMessage, { toastError } from "./Alert";
 import toastSuccess from "./Alert";
 import { postData } from "../others/api";
 import Select, { selectClasses } from "@mui/joy/Select";
 import Option from "@mui/joy/Option";
 import KeyboardArrowDown from "@mui/icons-material/KeyboardArrowDown";
+import { createData } from "../others/common";
 
 export default function AddNewCustomer({ state, toggleDrawer }) {
   const [values, setValues] = React.useState({});
@@ -30,16 +31,38 @@ export default function AddNewCustomer({ state, toggleDrawer }) {
     return heatingId;
   }
 
-  const handleForm = (e) => {
+  // const handleForm = (e) => {
+  //   e?.prevent?.default();
+  //   // const data={...values, randomId:generateHeatingId()}
+  //   postData('/customer', values) // Replace '/items' with your API endpoint
+  //     .then((response) => {
+  //       // setData((prev) => [...prev, response]);
+  //       toastSuccess("Successfully customer created")
+  //       console.log("post res", response);
+  //     });
+  // };
+
+
+
+  const handleForm = async(e) => {
     e?.prevent?.default();
-    const data={...values, randomId:generateHeatingId()}
-    postData('/customer', data) // Replace '/items' with your API endpoint
-      .then((response) => {
-        // setData((prev) => [...prev, response]);
-        toastSuccess("Successfully customer created")
-        console.log("post res", response);
-      });
+    // const data = { ...values, randomId: generateHeatingId() };
+
+
+      try { 
+          const result = await createData(values, "customer"); // Wait for the promise to resolve
+          console.log("Customer created successfully", result);
+          if (result.status == "success") {
+            toastSuccess("Successfully customer created");
+          }
+        } catch (error) {
+          console.error("Error creating data:", error);
+          toastError("something went wrong");
+        }
+
   };
+
+
 
   const list = () => (
     <Box
@@ -53,7 +76,7 @@ export default function AddNewCustomer({ state, toggleDrawer }) {
         component="h5"
         sx={{ fontWeight: 600, marginBottom: "30px" }}
       >
-        Add New Person
+        Add New Customer
       </Typography>
       <Stack spacing={2}>
         <FormControl>
@@ -87,21 +110,31 @@ export default function AddNewCustomer({ state, toggleDrawer }) {
           <FormHelperText></FormHelperText>
         </FormControl>
         <FormControl>
-          <FormLabel>Address</FormLabel>
+          <FormLabel>Password</FormLabel>
           <Input
-            type="text"
+            type="email"
             onChange={(event) =>
-              setValues({ ...values, address: event.target.value })
+              setValues({ ...values, password: event.target.value })
             }
           />
           <FormHelperText></FormHelperText>
         </FormControl>
         <FormControl>
-          <FormLabel>Country</FormLabel>
+          <FormLabel>Street Address</FormLabel>
           <Input
             type="text"
             onChange={(event) =>
-              setValues({ ...values, country: event.target.value })
+              setValues({ ...values, streetAddress: event.target.value })
+            }
+          />
+          <FormHelperText></FormHelperText>
+        </FormControl>
+        <FormControl>
+          <FormLabel>City</FormLabel>
+          <Input
+            type="text"
+            onChange={(event) =>
+              setValues({ ...values, city: event.target.value })
             }
           />
           <FormHelperText></FormHelperText>
@@ -116,14 +149,9 @@ export default function AddNewCustomer({ state, toggleDrawer }) {
           />
           <FormHelperText></FormHelperText>
         </FormControl>
-        <FormControl>
+
+        {/* <FormControl>
           <FormLabel>Service Type</FormLabel>
-          {/* <Input
-            type="text"
-            onChange={(event) =>
-              setValues({ ...values, serviceType: event.target.value })
-            }
-          /> */}
           <Select
            onChange={(event, newValue) =>
             setValues({ ...values, serviceType: newValue })
@@ -216,7 +244,7 @@ export default function AddNewCustomer({ state, toggleDrawer }) {
             }
           />
           <FormHelperText></FormHelperText>
-        </FormControl>
+        </FormControl> */}
 
         <Button
           size="md"
@@ -226,7 +254,7 @@ export default function AddNewCustomer({ state, toggleDrawer }) {
           onClick={handleForm}
         >
           Submit
-        </Button> 
+        </Button>
       </Stack>
     </Box>
   );

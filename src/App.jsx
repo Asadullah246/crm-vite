@@ -20,6 +20,7 @@ import SignUp from "./pages/SignUp";
 import SignaturePage from "./pages/Signature";
 import Profile from "./pages/Profile";
 import ProductService from "./pages/ProductService";
+import UpdatePayment from "./pages/UpdatedPayment";
 // import UploadCustomer from "./pages/UploadCustomer";
 
 function App() {
@@ -42,6 +43,7 @@ function App() {
               <Route path="Template/create" element={<CreateWelcomeTemplate />} />
               <Route path="invoice/create" element={<CreateInvoice />} />
               <Route path="template/edit/:id" element={<EditTemplate />} />
+              <Route path="customer/:id" element={<UpdatePayment />} />
               <Route path="upload-customer" element={<UploadCustomer />} />
             </Route>
 

@@ -14,7 +14,7 @@ import FormLabel from "@mui/joy/FormLabel";
 import FormHelperText from "@mui/joy/FormHelperText";
 import Stack from "@mui/joy/Stack";
 import InfoOutlined from "@mui/icons-material/InfoOutlined";
-import AlertMessage from "./Alert";
+import AlertMessage, { toastError } from "./Alert";
 import toastSuccess from "./Alert";
 import { postData } from "../others/api";
 import Select, { selectClasses } from "@mui/joy/Select";
@@ -23,6 +23,7 @@ import KeyboardArrowDown from "@mui/icons-material/KeyboardArrowDown";
 import { Radio, RadioGroup, Textarea } from "@mui/joy";
 import ClearIcon from "@mui/icons-material/Clear";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
+import { createData } from "../others/common";
 
 export default function AddNewProduct({ state, toggleDrawer }) {
   const [values, setValues] = React.useState({});
@@ -30,9 +31,6 @@ export default function AddNewProduct({ state, toggleDrawer }) {
   const [emiOptionsData, setEmiOptionsData] = React.useState([
     { duration: "", pricePerMonth: "" },
   ]);
-
-  const [formData, setFormData] = React.useState({ description: "", type: "" });
-
   const [paymentMethod, setpaymentMethod] = React.useState("");
 
   React.useEffect(() => {
@@ -48,9 +46,9 @@ export default function AddNewProduct({ state, toggleDrawer }) {
 
 
 
-  const handleChange = (event) => {
-    setpaymentMethod(event.target.value); // Update the state with the selected value
-  };
+  // const handleChange = (event) => {
+  //   setpaymentMethod(event.target.value); // Update the state with the selected value
+  // };
 
 
   // Handle input change for an EMI option
@@ -77,15 +75,31 @@ export default function AddNewProduct({ state, toggleDrawer }) {
     return heatingId;
   }
 
-  const handleForm = (e) => {
+  const handleForm = async(e) => {
     e?.prevent?.default();
-    const data = { ...values, randomId: generateHeatingId() };
-    postData("/customer", data) // Replace '/items' with your API endpoint
-      .then((response) => {
-        // setData((prev) => [...prev, response]);
-        toastSuccess("Successfully customer created");
-        console.log("post res", response);
-      });
+    // const data = { ...values, randomId: generateHeatingId() };
+
+    const data = { ...values };
+console.log("data", data);
+
+
+
+if(values.type.includes("product") || values.type.includes("service")){
+  data.emiOptions=emiOptionsData;
+}
+
+
+      try {
+          const result = await createData(data, "product"); // Wait for the promise to resolve
+          console.log("Customer created successfully", result);
+          if (result.status == "success") {
+            toastSuccess("Successfully customer created");
+          }
+        } catch (error) {
+          console.error("Error creating data:", error);
+          toastError("something went wrong");
+        }
+
   };
 
   const list = () => (
@@ -126,7 +140,7 @@ export default function AddNewProduct({ state, toggleDrawer }) {
           <Textarea
             minRows={3} // Adjust the number of rows as needed
             onChange={(event) =>
-              setValues({ ...values, address: event.target.value })
+              setValues({ ...values, description: event.target.value })
             }
           />
           <FormHelperText></FormHelperText>
@@ -141,6 +155,7 @@ export default function AddNewProduct({ state, toggleDrawer }) {
             }
           /> */}
           <Select
+          multiple
             onChange={(event, newValue) =>
               setValues({ ...values, type: newValue })
             }
@@ -158,7 +173,7 @@ export default function AddNewProduct({ state, toggleDrawer }) {
           >
             <Option value="product">Product</Option>
             <Option value="service">Service</Option>
-            <Option value="product_with_service">Product with service</Option>
+            <Option value="subscription">Subscription</Option>
           </Select>
 
           <FormHelperText></FormHelperText>
@@ -169,24 +184,22 @@ export default function AddNewProduct({ state, toggleDrawer }) {
 
 
 {
-  emiStatus=="emi" &&
+  (values?.type?.includes("product") || values?.type?.includes("service")) &&
 
-  <FormControl >
-  <FormLabel>Payment options</FormLabel>
-  <RadioGroup sx={{display:"flex", flexDirection:"row", justifyContent:"space-between", alignItems:"center"}}
-   onChange={handleChange}
-   >
-        <Radio value="oneTimePayment" label="One Time Payment"  />
-        <Radio value="emi" label="EMI" sx={{marginTop:"0"}}  />
-      </RadioGroup>
-</FormControl>
-}
+  <>
+       <FormControl>
+          <FormLabel>One Time Price</FormLabel>
+          <Input
+            type="number"
+            onChange={(event) =>
+              setValues({ ...values, oneTimePaymentAmount: event.target.value })
+            }
+          />
+          <FormHelperText></FormHelperText>
+        </FormControl>
 
-
-
-        {(emiStatus=="emi" &&  paymentMethod=="emi") && (
-          <>
-            {emiOptionsData.map((option, index) => (
+        <FormLabel>EMI Options:</FormLabel>
+        {emiOptionsData.map((option, index) => (
               <div
                 key={index}
                 style={{
@@ -242,28 +255,26 @@ export default function AddNewProduct({ state, toggleDrawer }) {
             >
               <AddCircleOutlineIcon />
             </button>
-          </>
-        )}
+        </>
 
-        {(emiStatus=="emi" &&  paymentMethod=="oneTimePayment") && (
-          <>
-               <FormControl>
-          <FormLabel>One Time Price</FormLabel>
-          <Input
-            type="number"
-            onChange={(event) =>
-              setValues({ ...values, oneTimePaymentAmount: event.target.value })
-            }
-          />
-          <FormHelperText></FormHelperText>
-        </FormControl>
-          </>
-        )}
+//   <FormControl >
+//   <FormLabel>Payment options</FormLabel>
+//   <RadioGroup sx={{display:"flex", flexDirection:"row", justifyContent:"space-between", alignItems:"center"}}
+//    onChange={handleChange}
+//    >
+//         <Radio value="oneTimePayment" label="One Time Payment"  />
+//         <Radio value="emi" label="EMI" sx={{marginTop:"0"}}  />
+//       </RadioGroup>
+// </FormControl>
+}
 
 
 
 
-       {emiStatus=="service" && <>
+
+
+
+       {values?.type?.includes("subscription") && <> 
         <FormLabel>Subscription Details</FormLabel>
 
         <FormControl>
@@ -271,7 +282,7 @@ export default function AddNewProduct({ state, toggleDrawer }) {
           <Input
             type="number"
             onChange={(event) =>
-              setValues({ ...values, minDuration: event.target.value })
+              setValues({ ...values, subscriptionDetails:{...values.subscriptionDetails, minDuration: event.target.value }})
             }
           />
           <FormHelperText></FormHelperText>
@@ -282,7 +293,7 @@ export default function AddNewProduct({ state, toggleDrawer }) {
           <Input
             type="number"
             onChange={(event) =>
-              setValues({ ...values, maxDuration: event.target.value })
+              setValues({ ...values,subscriptionDetails:{...values.subscriptionDetails, maxDuration: event.target.value } })
             }
           />
           <FormHelperText></FormHelperText>
@@ -292,7 +303,7 @@ export default function AddNewProduct({ state, toggleDrawer }) {
           <Input
             type="number"
             onChange={(event) =>
-              setValues({ ...values, monthlyFee: event.target.value })
+              setValues({ ...values, subscriptionDetails:{...values.subscriptionDetails, monthlyFee: event.target.value }})
             }
           />
           <FormHelperText></FormHelperText>

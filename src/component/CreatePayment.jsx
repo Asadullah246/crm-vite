@@ -11,10 +11,15 @@ import Select, { selectClasses } from "@mui/joy/Select";
 import Option from "@mui/joy/Option";
 import KeyboardArrowDown from "@mui/icons-material/KeyboardArrowDown";
 import { Grid } from "@mui/joy";
-import toastSuccess from "../component/Alert";
 import { getData, postData } from "../others/api";
+import toastSuccess from "./Alert";
+import { useParams } from "react-router-dom";
+// import toastSuccess from "./Alert";
+// import { getData, postData } from "../others/api";
 
-const CreateInvoice = () => {
+const CreatePayment = () => {
+  const { id } = useParams();
+
   const [values, setValues] = React.useState({});
   const [data, setData] = React.useState([]);
   const [loading, setLoading] = React.useState(false);
@@ -25,13 +30,44 @@ const CreateInvoice = () => {
   // Fetch data on component mount
   React.useEffect(() => {
     setLoading(true);
-    getData('/customer')
+
+
+
+
+
+  const handleForm = async(e) => {
+    e?.prevent?.default();
+    // const data = { ...values, randomId: generateHeatingId() };
+
+
+      try {
+          const result = await  getData(`/customer/paymentInfo/${id}`); // Wait for the promise to resolve
+          console.log("Customer", result);
+          if (result.status == "success") {
+            toastSuccess("Successfully customer created");
+          }
+        } catch (error) {
+          console.error("Error creating data:", error);
+          // toastError("something went wrong");
+        }
+
+  };
+
+
+    getData(`/customer/paymentInfo/${id}`)
       .then((response) => {
         setData(response?.data);
         setLoading(false);
       })
       .catch(() => setLoading(false));
-  }, [refresh]);
+  }, [refresh, id]);
+
+
+
+
+
+
+
   React.useEffect(() => {
     setLoading(true);
    const currentPerson=data?.find(s=>s?.name==person)
@@ -50,7 +86,7 @@ const CreateInvoice = () => {
   };
 
   return (
-    <div className="pageLayout">
+    <div >
       <div className="content-topbar">
         <div className="content-title">
           <ArrowBackIcon />
@@ -346,4 +382,4 @@ const CreateInvoice = () => {
   );
 };
 
-export default CreateInvoice;
+export default CreatePayment;
