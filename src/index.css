@@ -70,6 +70,9 @@ button:focus-visible {
   background-color: #F4F7FB !important;
 
 }
+.menuItem .MuiSvgIcon-root {
+  width: 19px;
+}
 
 @media (prefers-color-scheme: light) {
   :root {

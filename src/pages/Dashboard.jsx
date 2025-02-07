@@ -16,7 +16,7 @@ import MailIcon from "@mui/icons-material/Mail";
 import MenuIcon from "@mui/icons-material/Menu";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
-import { Link, Outlet } from "react-router-dom";
+import { Link, Outlet, useLocation } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import logo from "../assets/amsi-logo.png";
 import Badge from "@mui/joy/Badge";
@@ -33,6 +33,7 @@ const drawerWidth = 240;
 
 function Dashboard(props) {
   const { window } = props;
+  const location = useLocation();
   const [mobileOpen, setMobileOpen] = React.useState(false);
   const [isClosing, setIsClosing] = React.useState(false);
   const [tab, setTab] = React.useState("Dashboard");
@@ -101,7 +102,8 @@ function Dashboard(props) {
   const drawer = (
     <div style={{ backgroundColor: "#F4F7FB" }} className="mainMenu">
       {/* <Toolbar style={{ backgroundColor: "#F4F7FB" }} /> */}
-      {/* <Divider style={{  backgroundColor:"#F4F7FB"}} /> */}
+
+
       <div
         style={{
           paddingLeft: "32px",
@@ -109,7 +111,7 @@ function Dashboard(props) {
           display: "flex",
           alignItems: "center",
           gap: "10px",
-          marginBottom: "20px",
+          marginBottom: "10px",
         }}
       >
         <img src={logo} alt="Logo" style={{ height: 40, width: "auto" }} />
@@ -117,29 +119,44 @@ function Dashboard(props) {
           AMSI
         </Typography>
       </div>
+      <Divider style={{  backgroundColor:"#F4F7FB", marginBottom:"20px"}} />
       <List>
         {["Dashboard", "Customer","product", "Invoice", "Template","payments","Signature","Profile"].map(
-          (text, index) => (
-            <Link
-              to={text == "Dashboard" ? "/" : text}
-              key={text}
-              style={{ padding: 0 }}
-            >
-              <ListItem style={{ paddingTop: 5, paddingBottom: 5 }}>
-                <ListItemButton
-                  style={{ paddingTop: 0, paddingBottom: 0, gap: 0 }}
-                >
-                  <ListItemIcon style={{ fontSize: "0.7em !important" }}>
-                    {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-                  </ListItemIcon>
-                  <ListItemText
-                    primary={text}
-                    style={{ fontSize: "0.7em !important" }}
-                  />
-                </ListItemButton>
-              </ListItem>
-            </Link>
-          )
+          (text, index) => {
+            const route = text === "Dashboard" ? "/" : `/${text}`;
+            const isActive = location.pathname === route;
+            console.log("isactive", isActive, route);
+
+            return    (
+              <Link
+                to={text == "Dashboard" ? "/" : text}
+                key={text}
+                style={{ padding: 0 }}
+              >
+                <ListItem  style={{ paddingTop: 5, paddingBottom: 5,    }}>
+                  <ListItemButton
+                    sx={{ paddingTop: "1px", paddingBottom: "1px", gap: 0, backgroundColor: isActive ? "#0B6BCB" : "", color: isActive ? "white" : "black",  "&:hover": {
+                      backgroundColor: isActive ? "#0B6BCB" : "#0B6BCB", color:"white"
+                    },
+                    "&:hover .MuiListItemIcon-root": {
+                      color: "white",
+                    },
+                     borderRadius:"7px" }}
+                     className="menuItem"
+                  >
+                    <ListItemIcon sx={{ color: isActive ? "white" : "black", }}>
+                      {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
+                    </ListItemIcon>
+                    <ListItemText
+                      primary={text}
+                      style={{ fontSize: "0.7em !important" }}
+                    />
+                  </ListItemButton>
+                </ListItem>
+              </Link>
+            )
+          }
+
         )}
       </List>
       {/* <Divider /> */}
