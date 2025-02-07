@@ -23,15 +23,33 @@ import KeyboardArrowDown from "@mui/icons-material/KeyboardArrowDown";
 import { Radio, RadioGroup, Textarea } from "@mui/joy";
 import ClearIcon from "@mui/icons-material/Clear";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
-import { createData } from "../others/common";
+import { createData, updateData } from "../others/common";
 
-export default function EditProduct({ state, toggleDrawer }) {
+export default function EditProduct({ editState, toggleDrawerEdit, setEditState, product , refresh, setRefresh}) { 
   const [values, setValues] = React.useState({});
   const [emiStatus, setEmiStatus] = React.useState(null);
-  const [emiOptionsData, setEmiOptionsData] = React.useState([
-    { duration: "", pricePerMonth: "" },
-  ]);
+const [emiOptionsData, setEmiOptionsData] = React.useState([]);
   const [paymentMethod, setpaymentMethod] = React.useState("");
+
+  React.useEffect(()=>{
+    const initialEmiOptionsData = product?.emiOptions
+    ? product.emiOptions.map(({ _id, ...rest }) => rest)
+    : [{ duration: "", pricePerMonth: "" }];
+
+    setEmiOptionsData(initialEmiOptionsData);
+  },[product])
+
+  React.useEffect(()=>{
+    setValues({name: product?.name,
+      description: product?.description,
+      type: product?.type,
+      oneTimePaymentAmount: product?.oneTimePaymentAmount,
+      subscriptionDetails: {
+        minDuration: product?.subscriptionDetails?.minDuration,
+        maxDuration: product?.subscriptionDetails?.maxDuration,
+        monthlyFee: product?.subscriptionDetails?.monthlyFee,
+    }})
+  },[product])
 
   React.useEffect(() => {
     if (values.type == "product" || values.type == "service") {
@@ -41,14 +59,6 @@ export default function EditProduct({ state, toggleDrawer }) {
       setEmiStatus("service");
     }
   }, [values?.type]);
-
-
-
-
-
-  // const handleChange = (event) => {
-  //   setpaymentMethod(event.target.value); // Update the state with the selected value
-  // };
 
 
   // Handle input change for an EMI option
@@ -90,10 +100,11 @@ if(values.type.includes("product") || values.type.includes("service")){
 
 
       try {
-          const result = await createData(data, "product"); // Wait for the promise to resolve
-          console.log("Customer created successfully", result);
+          const result = await updateData(data, `product/${product?._id}`); // Wait for the promise to resolve
           if (result.status == "success") {
-            toastSuccess("Successfully customer created");
+            setRefresh(!refresh);
+            setEditState(false);
+            toastSuccess("Successfully product updated");
           }
         } catch (error) {
           console.error("Error creating data:", error);
@@ -101,6 +112,8 @@ if(values.type.includes("product") || values.type.includes("service")){
         }
 
   };
+
+
 
   const list = () => (
     <Box
@@ -114,13 +127,14 @@ if(values.type.includes("product") || values.type.includes("service")){
         component="h5"
         sx={{ fontWeight: 600, marginBottom: "30px" }}
       >
-        Add New Product/service
+        {product?.name}
       </Typography>
       <Stack spacing={2}>
         <FormControl>
           <FormLabel>Name</FormLabel>
           <Input
             type="text"
+            value={values?.name}
             onChange={(event) =>
               setValues({ ...values, name: event.target.value })
             }
@@ -139,6 +153,7 @@ if(values.type.includes("product") || values.type.includes("service")){
 
           <Textarea
             minRows={3} // Adjust the number of rows as needed
+            value={values?.description}
             onChange={(event) =>
               setValues({ ...values, description: event.target.value })
             }
@@ -156,6 +171,7 @@ if(values.type.includes("product") || values.type.includes("service")){
           /> */}
           <Select
           multiple
+            value={values?.type}
             onChange={(event, newValue) =>
               setValues({ ...values, type: newValue })
             }
@@ -191,6 +207,7 @@ if(values.type.includes("product") || values.type.includes("service")){
           <FormLabel>One Time Price</FormLabel>
           <Input
             type="number"
+            value={values?.oneTimePaymentAmount}
             onChange={(event) =>
               setValues({ ...values, oneTimePaymentAmount: event.target.value })
             }
@@ -281,6 +298,7 @@ if(values.type.includes("product") || values.type.includes("service")){
           <FormLabel>Min Duration</FormLabel>
           <Input
             type="number"
+            value={values?.subscriptionDetails?.minDuration}
             onChange={(event) =>
               setValues({ ...values, subscriptionDetails:{...values.subscriptionDetails, minDuration: event.target.value }})
             }
@@ -292,6 +310,7 @@ if(values.type.includes("product") || values.type.includes("service")){
           <FormLabel>Max Duration</FormLabel>
           <Input
             type="number"
+            value={values?.subscriptionDetails?.maxDuration}
             onChange={(event) =>
               setValues({ ...values,subscriptionDetails:{...values.subscriptionDetails, maxDuration: event.target.value } })
             }
@@ -302,6 +321,7 @@ if(values.type.includes("product") || values.type.includes("service")){
           <FormLabel>Monthly Fee</FormLabel>
           <Input
             type="number"
+            value={values?.subscriptionDetails?.monthlyFee}
             onChange={(event) =>
               setValues({ ...values, subscriptionDetails:{...values.subscriptionDetails, monthlyFee: event.target.value }})
             }
@@ -329,7 +349,7 @@ if(values.type.includes("product") || values.type.includes("service")){
             {"right"}
           </Button> */}
       {/* {['top', 'right', 'bottom', 'left'].map((anchor) => ( */}
-      <Drawer open={state} onClose={toggleDrawer(false)} anchor={"right"}>
+      <Drawer open={editState} onClose={toggleDrawerEdit(false)} anchor={"right"}>
         {list()}
       </Drawer>
 

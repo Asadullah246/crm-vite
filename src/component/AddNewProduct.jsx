@@ -25,7 +25,7 @@ import ClearIcon from "@mui/icons-material/Clear";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 import { createData } from "../others/common";
 
-export default function AddNewProduct({ state, toggleDrawer }) {
+export default function AddNewProduct({ state, toggleDrawer, refresh, setRefresh }) {
   const [values, setValues] = React.useState({});
   const [emiStatus, setEmiStatus] = React.useState(null);
   const [emiOptionsData, setEmiOptionsData] = React.useState([
@@ -93,6 +93,7 @@ if(values.type.includes("product") || values.type.includes("service")){
           const result = await createData(data, "product"); // Wait for the promise to resolve
           console.log("Customer created successfully", result);
           if (result.status == "success") {
+            setRefresh(!refresh);
             toastSuccess("Successfully customer created");
           }
         } catch (error) {
@@ -332,7 +333,7 @@ if(values.type.includes("product") || values.type.includes("service")){
       <Drawer open={state} onClose={toggleDrawer(false)} anchor={"right"}>
         {list()}
       </Drawer>
-     
+
     </div>
   );
 }

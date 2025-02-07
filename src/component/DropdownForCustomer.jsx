@@ -16,18 +16,7 @@ import AddingProductService from './AddingProductService';
 
 
 
-export default function DropdownForCustomer({id, setRefresh, refresh, api, show}) {
-
-  const navigate=useNavigate()
-
-    const deleteItem = (id) => {
-        deleteData(`/${api}/${id}`) // Replace `/items/${id}` with your API endpoint
-          .then(() => {
-            setRefresh(!refresh)
-            toastSuccess("Successfully deleted")
-
-          });
-      };
+export default function DropdownForCustomer({id, setRefresh, refresh, api, show, buttonList, handleEdit, handleDelete}) {
 
   return (
     <Dropdown>
@@ -38,21 +27,34 @@ export default function DropdownForCustomer({id, setRefresh, refresh, api, show}
         <MoreVert />
       </MenuButton>
       <Menu placement="bottom-end">
-        <MenuItem
-        onClick={()=>navigate(show)}>
-          <ListItemDecorator>
-            <Edit />
-          </ListItemDecorator>{' '}
-          Show
-        </MenuItem>
 
-        <ListDivider />
-        <MenuItem variant="soft" color="danger" sx={{gap:0 }} onClick={()=>deleteItem(id)}>
-          <ListItemDecorator sx={{ color: 'inherit' }}>
-            <DeleteForever sx={{width:20}} />
-          </ListItemDecorator>{' '}
-          Delete
-        </MenuItem>
+        {buttonList?.map((item, index)=>{
+          return(
+            <>
+            <MenuItem
+            key={index}
+            variant="soft" color={item=="Delete"? "danger":""} sx={{gap:0 }}
+            onClick={()=>{
+              if(item=="Edit"){
+                handleEdit()
+              }
+              if(item=="Delete"){
+                handleDelete()
+              }
+            }}>
+              <ListItemDecorator>
+                {item== "Edit" &&  <Edit sx={{width:18}}  /> }
+                {item== "Delete" &&   <DeleteForever sx={{width:18}} /> }
+
+              </ListItemDecorator>{' '}
+              {item}
+            </MenuItem>
+            <ListDivider />
+            </>
+          )
+
+        })}
+
       </Menu>
     </Dropdown>
   );

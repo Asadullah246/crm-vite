@@ -10,11 +10,12 @@ import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import { Typography } from "@mui/material";
 import Button from "@mui/joy/Button";
 import Input from "@mui/joy/Input";
-import { getData } from "../others/api";
+import { deleteData, getData } from "../others/api";
 import DropdownForCustomer from "./DropdownForCustomer";
 import { useNavigate } from "react-router-dom";
 import AddNewProduct from "./AddNewProduct";
 import EditProduct from "./EditProduct";
+import toastSuccess from "./Alert";
 
 export default function ProductServiceTable() {
   const [state, setState] = React.useState(false);
@@ -74,7 +75,7 @@ export default function ProductServiceTable() {
   };
 
   const deleteItem = (id) => {
-    deleteData(`/${api}/${id}`) // Replace `/items/${id}` with your API endpoint
+    deleteData(`/product/${id}`)
       .then(() => {
         setRefresh(!refresh)
         toastSuccess("Successfully deleted")
@@ -88,13 +89,18 @@ export default function ProductServiceTable() {
         state={state}
         setState={setState}
         toggleDrawer={toggleDrawer}
+        refresh={refresh}
+        setRefresh={setRefresh}
       ></AddNewProduct>
 
 
       <EditProduct
-        state={editState}
-        setState={setEditState}
-        toggleDrawer={toggleDrawerEdit}
+        editState={editState}
+        setEditState={setEditState}
+        toggleDrawerEdit={toggleDrawerEdit}
+        product={product}
+        refresh={refresh}
+        setRefresh={setRefresh}
       ></EditProduct>
 
 
@@ -170,8 +176,13 @@ export default function ProductServiceTable() {
                     setRefresh={setRefresh}
                     refresh={refresh}
                     api={"product"}
-                    handleEdit={toggleDrawerEdit(true)}
-                    handleDelete={toggleDrawerEdit(true)}
+                    handleEdit={()=>{
+                      console.log("calling");
+                      setProduct(row);
+                      setEditState(true);
+                      // toggleDrawerEdit(true) ;
+                    }}
+                    handleDelete={()=>deleteItem(row?._id)}
                     buttonList={["Edit", "Delete"]}
                   />
                 </TableCell>
