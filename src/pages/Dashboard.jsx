@@ -26,8 +26,14 @@ import Dropdown from "@mui/joy/Dropdown";
 import Menu from "@mui/joy/Menu";
 import MenuButton from "@mui/joy/MenuButton";
 import MenuItem from "@mui/joy/MenuItem";
-import DoneIcon from '@mui/icons-material/Done';
-import adsation from "../assets/adsation.png"
+
+
+import DashboardIcon from '@mui/icons-material/Dashboard';
+import PeopleAltIcon from '@mui/icons-material/PeopleAlt';
+import ProductionQuantityLimitsIcon from '@mui/icons-material/ProductionQuantityLimits';
+import PaymentIcon from '@mui/icons-material/Payment';
+import Person2Icon from '@mui/icons-material/Person2';
+import ReceiptIcon from '@mui/icons-material/Receipt';
 
 const drawerWidth = 240;
 
@@ -125,7 +131,6 @@ function Dashboard(props) {
           (text, index) => {
             const route = text === "Dashboard" ? "/" : `/${text}`;
             const isActive = location.pathname === route;
-            console.log("isactive", isActive, route);
 
             return    (
               <Link
@@ -135,7 +140,7 @@ function Dashboard(props) {
               >
                 <ListItem  style={{ paddingTop: 5, paddingBottom: 5,    }}>
                   <ListItemButton
-                    sx={{ paddingTop: "1px", paddingBottom: "1px", gap: 0, backgroundColor: isActive ? "#0B6BCB" : "", color: isActive ? "white" : "black",  "&:hover": {
+                    sx={{ paddingTop: "1px", paddingBottom: "1px", gap: 1, backgroundColor: isActive ? "#0B6BCB" : "", color: isActive ? "white" : "black",  "&:hover": {
                       backgroundColor: isActive ? "#0B6BCB" : "#0B6BCB", color:"white"
                     },
                     "&:hover .MuiListItemIcon-root": {
@@ -145,7 +150,14 @@ function Dashboard(props) {
                      className="menuItem"
                   >
                     <ListItemIcon sx={{ color: isActive ? "white" : "black", }}>
-                      {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
+                      {index === 0 && <DashboardIcon /> }
+                      {index === 1 && <PeopleAltIcon /> }
+                      {index === 2 && <ProductionQuantityLimitsIcon /> }
+                      {index === 3 && <PaymentIcon /> }
+                      {index === 4 && <Person2Icon /> }
+                      {index === 5 && <ReceiptIcon /> }
+                      {index === 6 && <ReceiptIcon /> }
+                      {index === 7 && <ReceiptIcon /> }
                     </ListItemIcon>
                     <ListItemText
                       primary={text}
@@ -190,7 +202,7 @@ function Dashboard(props) {
                 aria-label="open drawer"
                 edge="start"
                 onClick={handleDrawerToggle}
-                sx={{ mr: 2, display: { sm: "none" } }}
+                sx={{ mr: 2, display: {sm: "none" } }}
               >
                 <MenuIcon />
               </IconButton>

@@ -14,14 +14,15 @@ import { getData } from "../others/api";
 import DropdownForCustomer from "./DropdownForCustomer";
 import { useNavigate } from "react-router-dom";
 import AddNewProduct from "./AddNewProduct";
-import { fetchData } from "../others/common";
+import EditProduct from "./EditProduct";
 
 export default function ProductServiceTable() {
   const [state, setState] = React.useState(false);
+  const [editState, setEditState] = React.useState(false);
   const [data, setData] = React.useState([]);
   const [loading, setLoading] = React.useState(false);
   const [refresh, setRefresh] = React.useState(false);
-  const navigate = useNavigate();
+  const [product, setProduct] = React.useState({});
 
   // Fetch data on component mount
   React.useEffect(() => {
@@ -61,8 +62,25 @@ export default function ProductServiceTable() {
 
     setState(inOpen);
   };
+  const toggleDrawerEdit = (inOpen) => (event) => {
+    if (
+      event.type === "keydown" &&
+      (event.key === "Tab" || event.key === "Shift")
+    ) {
+      return;
+    }
 
-  // console.log("dta", data);
+    setEditState(inOpen);
+  };
+
+  const deleteItem = (id) => {
+    deleteData(`/${api}/${id}`) // Replace `/items/${id}` with your API endpoint
+      .then(() => {
+        setRefresh(!refresh)
+        toastSuccess("Successfully deleted")
+
+      });
+  };
 
   return (
     <div>
@@ -71,6 +89,17 @@ export default function ProductServiceTable() {
         setState={setState}
         toggleDrawer={toggleDrawer}
       ></AddNewProduct>
+
+
+      <EditProduct
+        state={editState}
+        setState={setEditState}
+        toggleDrawer={toggleDrawerEdit}
+      ></EditProduct>
+
+
+
+
       <div className="content-topbar">
         <div className="content-title">
           <ArrowBackIcon />
@@ -83,7 +112,7 @@ export default function ProductServiceTable() {
           </Typography>
         </div>
         <div className="content-title">
-          <Input size="md" placeholder="Search" />
+          {/* <Input size="md" placeholder="Search" /> */}
           <Button
             size="md"
             variant={"solid"}
@@ -92,14 +121,14 @@ export default function ProductServiceTable() {
           >
             Add New
           </Button>
-          <Button
+          {/* <Button
             size="md"
             variant={"outlined"}
             color="primary"
             onClick={() => navigate("/upload-customer")}
           >
             Upload
-          </Button>
+          </Button> */}
           {/* <Button size="md" variant={"solid"} color="primary"  onClick={()=>toggleDrawer("right", true)}>
             {"right"}
           </Button> */}
@@ -141,6 +170,9 @@ export default function ProductServiceTable() {
                     setRefresh={setRefresh}
                     refresh={refresh}
                     api={"product"}
+                    handleEdit={toggleDrawerEdit(true)}
+                    handleDelete={toggleDrawerEdit(true)}
+                    buttonList={["Edit", "Delete"]}
                   />
                 </TableCell>
               </TableRow>

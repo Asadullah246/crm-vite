@@ -19,7 +19,7 @@ const DashboardInfo = () => {
     const navigate=useNavigate();
   return (
     <div>
-      <div className="content-topbar">
+      {/* <div className="content-topbar">
         <div className="content-title">
           <ArrowBackIcon />
           <Typography
@@ -31,7 +31,6 @@ const DashboardInfo = () => {
           </Typography>
         </div>
         <div className="content-title">
-          <Input size="md" placeholder="Search" />;
           <Button
             size="md"
             variant={"solid"}
@@ -40,11 +39,9 @@ const DashboardInfo = () => {
           >
             Customers
           </Button>
-          {/* <Button size="md" variant={"solid"} color="primary"  onClick={()=>toggleDrawer("right", true)}>
-            {"right"}
-          </Button> */}
+
         </div>
-      </div>
+      </div> */} 
 
 
         {/* <Typography variant="h6">Section 1</Typography> */}

@@ -47,9 +47,9 @@ export default function DropdownForCustomer({id, setRefresh, refresh, api, show}
         </MenuItem>
 
         <ListDivider />
-        <MenuItem variant="soft" color="danger" onClick={()=>deleteItem(id)}>
+        <MenuItem variant="soft" color="danger" sx={{gap:0 }} onClick={()=>deleteItem(id)}>
           <ListItemDecorator sx={{ color: 'inherit' }}>
-            <DeleteForever />
+            <DeleteForever sx={{width:20}} />
           </ListItemDecorator>{' '}
           Delete
         </MenuItem>

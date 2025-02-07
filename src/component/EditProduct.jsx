@@ -25,7 +25,7 @@ import ClearIcon from "@mui/icons-material/Clear";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 import { createData } from "../others/common";
 
-export default function AddNewProduct({ state, toggleDrawer }) {
+export default function EditProduct({ state, toggleDrawer }) {
   const [values, setValues] = React.useState({});
   const [emiStatus, setEmiStatus] = React.useState(null);
   const [emiOptionsData, setEmiOptionsData] = React.useState([
@@ -332,7 +332,7 @@ if(values.type.includes("product") || values.type.includes("service")){
       <Drawer open={state} onClose={toggleDrawer(false)} anchor={"right"}>
         {list()}
       </Drawer>
-     
+
     </div>
   );
 }

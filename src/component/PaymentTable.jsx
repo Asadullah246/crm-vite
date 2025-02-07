@@ -42,9 +42,8 @@ export default function PaymentTable() {
           return;
         }
 
-        setState(inOpen);
+        setState(inOpen); 
       };
-
 
   return (
    <div>
@@ -53,11 +52,11 @@ export default function PaymentTable() {
         <div className='content-title'>
            <ArrowBackIcon/>
            <Typography variant="h6" component="h6" style={{fontWeight:"bold"}} >
-        Invoices
+        Payment History
       </Typography>
         </div>
         <div className='content-title'>
-        <Input size="md" placeholder="Search" />;
+        {/* <Input size="md" placeholder="Search" /> */}
         <Button size="md" variant={"outlined"} color="primary" onClick={()=>setRefresh(!refresh)}>
           Refresh
         </Button>
@@ -69,33 +68,46 @@ export default function PaymentTable() {
      <TableContainer component={Paper}>
       <Table sx={{ minWidth: "100%", width:"100%" }} aria-label="simple table">
         <TableHead>
-          <TableRow>
-            <TableCell>Number</TableCell>
-            <TableCell align="right">Client</TableCell>
-            <TableCell align="right">Amount</TableCell>
-            <TableCell align="right">Date</TableCell>
-            <TableCell align="right">year</TableCell>
-            <TableCell align="right">Payment Mode</TableCell>
-            <TableCell align="right">Action</TableCell>
+          <TableRow sx={{backgroundColor:"#D3D3D3", }}>
+             <TableCell sx={{fontWeight:"600"}}>Product/Service Name</TableCell>
+            <TableCell sx={{fontWeight:"600"}} align="right">Customer</TableCell>
+            <TableCell sx={{fontWeight:"600"}} align="right">Address</TableCell>
+            <TableCell sx={{fontWeight:"600"}} align="right">Date</TableCell>
+            <TableCell sx={{fontWeight:"600"}} align="right">Type</TableCell>
+            <TableCell sx={{fontWeight:"600"}} align="right">Payment Mode</TableCell>
+            <TableCell sx={{fontWeight:"600"}} align="right">Amount</TableCell>
+            <TableCell sx={{fontWeight:"600"}} align="right">Status</TableCell>
+            <TableCell sx={{fontWeight:"600"}} align="right">Note</TableCell>
+            {/* <TableCell align="right">Note</TableCell> */}
           </TableRow>
         </TableHead>
         <TableBody>
           {data?.map((row) => (
             <TableRow
-              key={row?.name}
+              key={row?._id}
               sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
             >
               <TableCell component="th" scope="row">
-                {row?.number}
+              {row?.transactionId?.productId?.name}
               </TableCell>
-              <TableCell align="right">{row?.client}</TableCell>
-              <TableCell align="right">{row?.date}</TableCell>
-              <TableCell align="right">{row?.expireDate}</TableCell>
-              <TableCell align="right">{row?.total}</TableCell>
-              <TableCell align="right">{row?.paid}</TableCell>
+              <TableCell align="right">
+                {row?.customerId?.name} , {" "}
+                {row?.customerId?.phone}, {" "}
+                {row?.customerId?.email}
+              </TableCell>
+              <TableCell align="right">
+                {row?.customerId?.streetAddress}, {" "}
+                {row?.customerId?.city}, {" "}
+                {row?.customerId?.postalCode}
+              </TableCell>
+              <TableCell align="right">{row?.paymentDate?.slice(0,10)}</TableCell>
+              <TableCell align="right">{row?.transactionId?.type}</TableCell>
+              <TableCell align="right">{row?.paymentMethod}</TableCell>
+              <TableCell align="right">{row?.amount}</TableCell>
               <TableCell align="right">{row?.status}</TableCell>
-              <TableCell align="right">{row?.payment}</TableCell>
-              <TableCell align="right"><DropdownForCustomer id={row?._id} setRefresh={setRefresh} refresh={refresh} api={"payment"} /></TableCell>
+              <TableCell align="right">{row?.note}</TableCell>
+              {/* <TableCell align="right">{row?.payment}</TableCell>
+              <TableCell align="right"><DropdownForCustomer id={row?._id} setRefresh={setRefresh} refresh={refresh} api={"payment"} /></TableCell> */}
             </TableRow>
           ))}
         </TableBody>
