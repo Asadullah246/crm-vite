@@ -34,6 +34,8 @@ import ProductionQuantityLimitsIcon from '@mui/icons-material/ProductionQuantity
 import PaymentIcon from '@mui/icons-material/Payment';
 import Person2Icon from '@mui/icons-material/Person2';
 import ReceiptIcon from '@mui/icons-material/Receipt';
+import InventoryIcon from '@mui/icons-material/Inventory';
+import ManageAccountsIcon from '@mui/icons-material/ManageAccounts';
 
 const drawerWidth = 240;
 
@@ -141,7 +143,9 @@ function Dashboard(props) {
       </div>
       <Divider style={{  backgroundColor:"#F4F7FB", marginBottom:"20px"}} />
       <List>
-        {["Dashboard", "Customer","product", "All-Products", "Invoice", "Template","payments","Signature","Profile"].map(
+      {/* ["Dashboard", "Customer","product", "Orders", "Invoice", "Template","payments","Signature","Profile"] */}
+
+        {["Dashboard", "product", "Orders", "payments","Profile"].map(
           (text, index) => {
             const route = text === "Dashboard" ? "/" : `/${text}`;
             const isActive = location.pathname === route;
@@ -165,13 +169,57 @@ function Dashboard(props) {
                   >
                     <ListItemIcon sx={{ color: isActive ? "white" : "black", }}>
                       {index === 0 && <DashboardIcon /> }
-                      {index === 1 && <PeopleAltIcon /> }
+                      {index === 1 && <ManageAccountsIcon /> } 
                       {index === 2 && <ProductionQuantityLimitsIcon /> }
                       {index === 3 && <PaymentIcon /> }
                       {index === 4 && <Person2Icon /> }
-                      {index === 5 && <ReceiptIcon /> }
+                      {index === 5 && <InventoryIcon /> }
                       {index === 6 && <ReceiptIcon /> }
                       {index === 7 && <ReceiptIcon /> }
+                    </ListItemIcon>
+                    <ListItemText
+                      primary={text}
+                      style={{ fontSize: "0.7em !important" }}
+                    />
+                  </ListItemButton>
+                </ListItem>
+              </Link>
+            )
+          }
+
+        )}
+        { user?.role =="admin" &&
+        ["Customer"].map(
+          (text, index) => {
+            const route = text === "Dashboard" ? "/" : `/${text}`;
+            const isActive = location.pathname === route;
+
+            return    (
+              <Link
+                to={text == "Dashboard" ? "/" : text}
+                key={text}
+                style={{ padding: 0 }}
+              >
+                <ListItem  style={{ paddingTop: 5, paddingBottom: 5,    }}>
+                  <ListItemButton
+                    sx={{ paddingTop: "1px", paddingBottom: "1px", gap: 1, backgroundColor: isActive ? "#0B6BCB" : "", color: isActive ? "white" : "black",  "&:hover": {
+                      backgroundColor: isActive ? "#0B6BCB" : "#0B6BCB", color:"white"
+                    },
+                    "&:hover .MuiListItemIcon-root": {
+                      color: "white",
+                    },
+                     borderRadius:"7px" }}
+                     className="menuItem"
+                  >
+                    <ListItemIcon sx={{ color: isActive ? "white" : "black", }}>
+
+                      {index === 0 && <PeopleAltIcon /> }
+                      {/* {index === 2 && <ProductionQuantityLimitsIcon /> }
+                      {index === 3 && <PaymentIcon /> }
+                      {index === 4 && <Person2Icon /> }
+                      {index === 5 && <InventoryIcon /> }
+                      {index === 6 && <ReceiptIcon /> }
+                      {index === 7 && <ReceiptIcon /> } */}
                     </ListItemIcon>
                     <ListItemText
                       primary={text}
@@ -209,7 +257,7 @@ function Dashboard(props) {
         }}
       >
         <Toolbar style={{ backgroundColor: "#F4F7FB", boxShadow: "none" }}>
-          <div style={{ width: "100%", paddingTop:"10px" }} className="normalFlexWithSpaceBetween">
+          <div style={{ width: "100%", paddingTop:"10px", paddingBottom:"10px", marginBottom:"30px" }} className="normalFlexWithSpaceBetween">
             <div>
               <IconButton
                 color="inherit"
@@ -235,14 +283,14 @@ function Dashboard(props) {
               style={{ color: "black", gap: "10px" }}
             >
               <Dropdown>
-                <MenuButton
+                {/* <MenuButton
                 slotProps={{ root: { variant: 'plain', color: 'neutral' } }}
                 sx={{border:"none" }}
                 >
                 <Badge badgeContent={old?.length} variant="soft">
                 <Typography sx={{ fontSize: "xl" }}>💌</Typography>
               </Badge>
-                </MenuButton>
+                </MenuButton> */}
                 <Menu style={{maxHeight:"70vh", overflow:"auto",  borderRadius:"10px", padding:"20px"}}>
                   {
                     old?.map((c,index)=>{

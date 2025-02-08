@@ -1,8 +1,11 @@
 import React, { useState, useEffect } from "react";
-import { Box, Button, TextField, Typography, Stack, Paper } from "@mui/material";
-
-export default function Profile() { 
+import { Box, TextField, Typography, Stack, Paper } from "@mui/material";
+import UpdateProfile from "../component/UpdateProfile";
+import Button from '@mui/joy/Button';
+export default function Profile() {
   const [isEditing, setIsEditing] = useState(false); // Toggle edit mode
+  const [state, setState] = React.useState(false);
+  const [refresh, setRefresh]=useState(false)
   const [userData, setUserData] = useState({
     name: "",
     email: "",
@@ -10,6 +13,13 @@ export default function Profile() {
   });
 
   const [formData, setFormData] = useState({ ...userData }); // Form state
+
+  const [user, setUser] = React.useState();
+
+  React.useEffect(() => {
+    const getUser = JSON.parse(localStorage.getItem("user")); 
+    setUser(getUser);
+  }, [refresh]);
 
   // Mock fetch user data (Simulating an API call)
   useEffect(() => {
@@ -22,6 +32,15 @@ export default function Profile() {
     setUserData(mockUserData);
     setFormData(mockUserData);
   }, []);
+
+  const toggleDrawer = (inOpen) => (event) => {
+    if (event.type === 'keydown' && (event.key === 'Tab' || event.key === 'Shift')) {
+      return;
+    }
+
+    setState(inOpen);
+  };
+
 
   // Handle input changes in form
   const handleInputChange = (e) => {
@@ -40,8 +59,35 @@ export default function Profile() {
     setIsEditing(false);
   };
 
+  console.log("user in " , user);
+
   return (
-    <Paper
+    <div className="pageLayout">
+
+      <div className="heroSectionprofile">
+
+        <div>
+          <img src="https://ui-avatars.com/api/?name=asad&background=0D8ABC&color=fff" alt="" />
+
+        </div>
+
+        <div className="infoDivProfile">
+          <p> <span className="dataTitle">Name :</span> <span> {user?.name}</span></p>
+          <p> <span className="dataTitle">Email :</span> <span> {user?.email}</span></p>
+          <p> <span className="dataTitle">Phone :</span> <span> {user?.phone}</span></p>
+          <p> <span className="dataTitle">Address :</span> <span> {user?.streetAddress || user?.address}</span></p>
+          <p> <span className="dataTitle">Postal Code :</span> <span> {user?.postalCode}</span></p>
+          <p> <span className="dataTitle">City :</span> <span> {user?.city}</span></p>
+          <Button size="md" variant={"solid"}  color="primary" onClick={toggleDrawer(true)}>
+          Update Profile
+        </Button>
+        </div>
+      </div>
+
+
+      <UpdateProfile state={state} user={user} setState={setState} refresh={refresh} setRefresh={setRefresh} toggleDrawer={toggleDrawer} />
+
+{/* <Paper
       elevation={3}
       sx={{
         width: { xs: "90%", md: "60%" },
@@ -57,7 +103,7 @@ export default function Profile() {
       </Typography>
 
       <Stack spacing={2} mt={2}>
-        {/* Name */}
+
         <TextField
           label="Name"
           name="name"
@@ -67,7 +113,6 @@ export default function Profile() {
           variant="outlined"
         />
 
-        {/* Email */}
         <TextField
           label="Email"
           name="email"
@@ -77,7 +122,6 @@ export default function Profile() {
           variant="outlined"
         />
 
-        {/* Password */}
         <TextField
           label="Password"
           name="password"
@@ -88,7 +132,6 @@ export default function Profile() {
           variant="outlined"
         />
 
-        {/* Buttons */}
         <Box display="flex" justifyContent="center" gap={2} mt={2}>
           {isEditing ? (
             <>
@@ -120,6 +163,7 @@ export default function Profile() {
           )}
         </Box>
       </Stack>
-    </Paper>
+    </Paper> */}
+    </div>
   );
 }

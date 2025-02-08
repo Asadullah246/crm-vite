@@ -16,7 +16,7 @@ export default function AuthForm() {
   const [loading, setLoading] = useState(false);
 
 
-  const navigate = useNavigate();
+  const navigate = useNavigate(); 
   const location = useLocation();
   const from = location.state?.from?.pathname || "/";
 
@@ -61,7 +61,7 @@ export default function AuthForm() {
       const result = await loginUser(data, "auth/signIn"); // Wait for the promise to resolve
       console.log("Customer created successfully", result);
       if (result?.status == "success") {
-        navigate(from, { replace: true }); 
+        navigate(from, { replace: true });
       } else {
         setError(result?.message || "Something went wrong");
         setTimeout(() => {

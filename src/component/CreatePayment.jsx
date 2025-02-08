@@ -55,7 +55,7 @@ const CreatePayment = () => {
             return accumulator + currentItem.totalAmountDue;
           }, 0);
           setTotal(totalAmount);
-          setPaymentInfo(result?.data?.dues);
+          setPaymentInfo(result?.data?.dues); 
         }
         setLoading(false);
       } catch (error) {

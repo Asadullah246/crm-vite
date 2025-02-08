@@ -20,10 +20,27 @@ import { postData } from "../others/api";
 import Select, { selectClasses } from "@mui/joy/Select";
 import Option from "@mui/joy/Option";
 import KeyboardArrowDown from "@mui/icons-material/KeyboardArrowDown";
-import { createData } from "../others/common";
+import { createData, updateData } from "../others/common";
+import { useNavigate } from "react-router-dom";
 
-export default function AddNewCustomer({ state, toggleDrawer }) {
+export default function UpdateProfile ({ state, setState ,toggleDrawer, user, refresh, setRefresh }) {
   const [values, setValues] = React.useState({});
+  const navigate = useNavigate();
+  React.useEffect(()=>{
+
+
+setValues({
+    streetAddress: user?.streetAddress || user?.address,
+  email: user?.email,
+  name: user?.name,
+  phone: user?.phone,
+  password: user?.password,
+  postalCode: user?.postalCode,
+  })
+
+
+  }, [user])
+
 
   function generateHeatingId() {
     const randomNumber = Math.floor(Math.random() * 10000); // Generate a random number
@@ -31,16 +48,30 @@ export default function AddNewCustomer({ state, toggleDrawer }) {
     return heatingId;
   }
 
+
+
+  const handleAlert = () => {
+    alert("Successfully profile updated. Please log in again."); // Shows an alert with an "OK" button
+    navigate("/signup"); // Redirects to login page after clicking "OK"
+  };
+
+
   const handleForm = async(e) => {
     e?.prevent?.default();
     // const data = { ...values, randomId: generateHeatingId() };
 
 
       try {
-          const result = await createData(values, "customer"); // Wait for the promise to resolve
-          console.log("Customer created successfully", result);
+          const result = await updateData(values, `customer/${user?._id}`); // Wait for the promise to resolve
           if (result.status == "success") {
-            toastSuccess("Successfully customer created");
+            localStorage.removeItem("user");
+            localStorage.removeItem("jwtToken");
+            localStorage.removeItem("userRole");
+            localStorage.removeItem("role"); 
+            handleAlert();
+            // setRefresh(!refresh);
+            // toastSuccess("Successfully profile updated");
+            setState(false)
           }
         } catch (error) {
           console.error("Error creating data:", error);
@@ -70,6 +101,7 @@ export default function AddNewCustomer({ state, toggleDrawer }) {
           <FormLabel>Name</FormLabel>
           <Input
             type="text"
+            value={values?.name}
             onChange={(event) =>
               setValues({ ...values, name: event.target.value })
             }
@@ -80,6 +112,7 @@ export default function AddNewCustomer({ state, toggleDrawer }) {
           <FormLabel>Phone</FormLabel>
           <Input
             type="phone"
+            value={values?.phone}
             onChange={(event) =>
               setValues({ ...values, phone: event.target.value })
             }
@@ -90,6 +123,7 @@ export default function AddNewCustomer({ state, toggleDrawer }) {
           <FormLabel>Email</FormLabel>
           <Input
             type="email"
+            value={values?.email}
             onChange={(event) =>
               setValues({ ...values, email: event.target.value })
             }
@@ -99,7 +133,9 @@ export default function AddNewCustomer({ state, toggleDrawer }) {
         <FormControl>
           <FormLabel>Password</FormLabel>
           <Input
-            type="email"
+            type="text"
+            required
+            value={values?.password}
             onChange={(event) =>
               setValues({ ...values, password: event.target.value })
             }
@@ -110,6 +146,7 @@ export default function AddNewCustomer({ state, toggleDrawer }) {
           <FormLabel>Street Address</FormLabel>
           <Input
             type="text"
+            value={values?.streetAddress}
             onChange={(event) =>
               setValues({ ...values, streetAddress: event.target.value })
             }
@@ -120,6 +157,7 @@ export default function AddNewCustomer({ state, toggleDrawer }) {
           <FormLabel>City</FormLabel>
           <Input
             type="text"
+            value={values?.city}
             onChange={(event) =>
               setValues({ ...values, city: event.target.value })
             }
@@ -130,6 +168,7 @@ export default function AddNewCustomer({ state, toggleDrawer }) {
           <FormLabel>Postal Code</FormLabel>
           <Input
             type="number"
+            value={values?.postalCode}
             onChange={(event) =>
               setValues({ ...values, postalCode: event.target.value })
             }

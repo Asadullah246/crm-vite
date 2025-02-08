@@ -24,6 +24,7 @@ import UpdatePayment from "./pages/UpdatedPayment";
 import ProtectedRoute from "./component/ProtectedRoute";
 import AdminRoute from "./component/AdminRoute";
 import SingleProduct from "./pages/SingleProduct";
+import Orders from "./pages/Orders";
 // import UploadCustomer from "./pages/UploadCustomer";
 
 function App() {
@@ -43,6 +44,7 @@ function App() {
                 <Route path="payments" element={<Payments />} />
                 <Route path="Signature" element={<SignaturePage />} />
                 <Route path="Profile" element={<Profile />} />
+                <Route path="Orders" element={<Orders />} />
 
 
                 {/* <Route element={<AdminRoute />}> */}
