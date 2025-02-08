@@ -416,6 +416,24 @@ export const fetchDataWithSpecialId = async (
   }
 };
 
+export const loginUser = async (communityData, endpoint) => {
+  try {
+
+    const response = await axios.post(
+      `${API_BASE_URL}/${endpoint}`,
+      communityData
+    );
+    const token = response.headers['authorization'];
+    if( await token) {
+       localStorage.setItem("jwtToken", token);
+       localStorage.setItem("userRole", response?.data?.role); 
+    }
+    return response.data;
+  } catch (error) {
+    console.log("error ", error);
+    throw error;
+  }
+};
 export const createData = async (communityData, endpoint) => {
   try {
     const config = await getConfig();

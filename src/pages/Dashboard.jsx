@@ -16,7 +16,7 @@ import MailIcon from "@mui/icons-material/Mail";
 import MenuIcon from "@mui/icons-material/Menu";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
-import { Link, Outlet, useLocation } from "react-router-dom";
+import { Link, Outlet, useLocation, useNavigate } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import logo from "../assets/amsi-logo.png";
 import Badge from "@mui/joy/Badge";
@@ -40,6 +40,7 @@ const drawerWidth = 240;
 function Dashboard(props) {
   const { window } = props;
   const location = useLocation();
+  const navigate = useNavigate();
   const [mobileOpen, setMobileOpen] = React.useState(false);
   const [isClosing, setIsClosing] = React.useState(false);
   const [tab, setTab] = React.useState("Dashboard");
@@ -103,6 +104,11 @@ function Dashboard(props) {
     if (!isClosing) {
       setMobileOpen(!mobileOpen);
     }
+  };
+  const handleLogout = () => {
+   localStorage.removeItem("jwtToken");
+   localStorage.removeItem("userRole");
+   navigate("/signup"); 
   };
 
   const drawer = (
@@ -242,7 +248,7 @@ function Dashboard(props) {
               </Dropdown>
 
 
-              <Button variant="soft">Log out</Button>
+              <Button onClick={handleLogout} variant="soft">Log out</Button>
             </div>
           </div>
         </Toolbar>
