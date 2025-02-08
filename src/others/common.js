@@ -106,7 +106,7 @@ export const handleImageUploadToCloudflare = async (file, onProgress) => {
       {},
       {
         headers: {
-          Authorization: `Bearer ${CLOUDFLARE_API_KEY}`,
+          Authorization: `Bearer ${CLOUDFLARE_API_KEY}`,  
         },
       }
     );
@@ -116,11 +116,12 @@ export const handleImageUploadToCloudflare = async (file, onProgress) => {
 
     // Step 2: Upload the Image
     const formData = new FormData();
-    formData.append("file", {
-      uri: file.uri, // For React Native
-      type: file.type, // MIME type (e.g., image/png)
-      name: file.name, // File name
-    });
+    formData.append("file", file);
+    // formData.append("file", {
+    //   uri: file.uri, // For React Native
+    //   type: file.type, // MIME type (e.g., image/png)
+    //   name: file.name, // File name
+    // });
 
     const uploadResponse = await axios.post(uploadUrl, formData, {
       headers: {
@@ -426,7 +427,9 @@ export const loginUser = async (communityData, endpoint) => {
     const token = response.headers['authorization'];
     if( await token) {
        localStorage.setItem("jwtToken", token);
-       localStorage.setItem("userRole", response?.data?.role); 
+       localStorage.setItem("userRole", response?.data?.role);
+
+       localStorage.setItem("user", JSON.stringify({...(response?.data?.user), role: response?.data?.role}));
     }
     return response.data;
   } catch (error) {

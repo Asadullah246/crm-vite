@@ -49,6 +49,7 @@ function Dashboard(props) {
   const [loading, setLoading] = React.useState(false);
   const [refresh, setRefresh] = React.useState(false);
   const [old, setOld] = React.useState([]);
+  const [user, setUser]=React.useState()
 
   // Fetch data on component mount
   React.useEffect(() => {
@@ -60,6 +61,13 @@ function Dashboard(props) {
       })
       .catch(() => setLoading(false));
   }, [refresh]);
+
+  React.useEffect(() => {
+   const userData=JSON.parse(localStorage.getItem("user"));
+   console.log("user", userData);
+   setUser(userData);
+  }, []);
+
 
   React.useEffect(() => {
     const currentDate = new Date();
@@ -108,7 +116,7 @@ function Dashboard(props) {
   const handleLogout = () => {
    localStorage.removeItem("jwtToken");
    localStorage.removeItem("userRole");
-   navigate("/signup"); 
+   navigate("/signup");
   };
 
   const drawer = (
@@ -133,7 +141,7 @@ function Dashboard(props) {
       </div>
       <Divider style={{  backgroundColor:"#F4F7FB", marginBottom:"20px"}} />
       <List>
-        {["Dashboard", "Customer","product", "Invoice", "Template","payments","Signature","Profile"].map(
+        {["Dashboard", "Customer","product", "All-Products", "Invoice", "Template","payments","Signature","Profile"].map(
           (text, index) => {
             const route = text === "Dashboard" ? "/" : `/${text}`;
             const isActive = location.pathname === route;
@@ -201,7 +209,7 @@ function Dashboard(props) {
         }}
       >
         <Toolbar style={{ backgroundColor: "#F4F7FB", boxShadow: "none" }}>
-          <div style={{ width: "100%" }} className="normalFlexWithSpaceBetween">
+          <div style={{ width: "100%", paddingTop:"10px" }} className="normalFlexWithSpaceBetween">
             <div>
               <IconButton
                 color="inherit"
@@ -214,12 +222,12 @@ function Dashboard(props) {
               </IconButton>
 
               <Typography
-                variant="h4"
+                variant="h5"
                 noWrap
-                style={{ color: "#FE6F28" }}
+                style={{ color: "#0B6BCB", fontWeight: 600 }}
                 component="div"
               >
-                Hi, Asadullah
+               👋 Hi, {user?.name || "Admin"}
               </Typography>
             </div>
             <div

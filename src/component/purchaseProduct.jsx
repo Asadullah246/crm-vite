@@ -1,6 +1,4 @@
 import * as React from "react";
-import ArrowBackIcon from "@mui/icons-material/ArrowBack";
-import { Typography } from "@mui/material";
 import Button from "@mui/joy/Button";
 import Input from "@mui/joy/Input";
 import Divider from "@mui/joy/Divider";
@@ -11,58 +9,37 @@ import Select, { selectClasses } from "@mui/joy/Select";
 import Option from "@mui/joy/Option";
 import KeyboardArrowDown from "@mui/icons-material/KeyboardArrowDown";
 import { Grid, Textarea } from "@mui/joy";
-import toastSuccess, { toastError } from "../component/Alert";
+import toastSuccess, { toastError } from "./Alert";
 import { getData, postData } from "../others/api";
-
-import TextField from "@mui/material/TextField";
-import Autocomplete from "@mui/material/Autocomplete";
-import Stack from "@mui/material/Stack";
 import { Radio, RadioGroup } from "@mui/joy";
 import { createData } from "../others/common";
+import { Typography } from "@mui/material";
 
-const AddingProductService = ({ customer }) => {
+const PurchaseProduct = ({ value }) => {
   // console.log("cust", customer);
   const [values, setValues] = React.useState({});
   const [data, setData] = React.useState([]);
   const [loading, setLoading] = React.useState(false);
   const [refresh, setRefresh] = React.useState(false);
-  const [person, setPerson] = React.useState();
-  const [personData, setPersonData] = React.useState();
-  const [value, setValue] = React.useState(null);
   const [tab, setTab] = React.useState(0);
-  const [transactionId, setTransactionId] = React.useState(null);
-  const [productId, setProductId] = React.useState(null);
-  const [customerId, setCustomerId] = React.useState(null);
-  const [payment, setPayment] = React.useState({});
-  const [paymentMonth, setPaymentMonth] = React.useState();
+  // const [transactionId, setTransactionId] = React.useState(null);
+  // const [productId, setProductId] = React.useState(null);
+  // const [customerId, setCustomerId] = React.useState(null);
+  // const [paymentMonth, setPaymentMonth] = React.useState();
+  const [customer, setCustomer]=React.useState();
+  const [alert, setAlert]=React.useState("")
 
+  React.useEffect(()=>{
+    const userData=JSON.parse(localStorage.getItem("user"));
+    setCustomer(userData)
+  },[])
+console.log("cutomer", customer); 
   const defaultProps = {
     options: data,
     getOptionLabel: (option) => option?.name,
   };
 
-  // Fetch data on component mount
-  React.useEffect(() => {
-    let isMounted = true; // To track if the component is still mounted
-    setLoading(true);
 
-    const handleForm = async () => {
-      try {
-        const result = await getData("product");
-        setData(result?.data);
-        if (isMounted) setLoading(false);
-      } catch (error) { 
-        console.error("Error creating data:", error);
-        if (isMounted) setLoading(false);
-      }
-    };
-
-    handleForm();
-
-    return () => {
-      isMounted = false; // Cleanup flag when component unmounts
-    };
-  }, [refresh]);
 
   const getMonth = (data) => {
     const date = new Date(data);
@@ -73,6 +50,7 @@ const AddingProductService = ({ customer }) => {
 
   const handleInvoiceCreate = async (e) => {
     e?.prevent?.default();
+    setLoading(true)
 
     // setTab(1);
 
@@ -83,6 +61,7 @@ const AddingProductService = ({ customer }) => {
       customerId: customer?._id,
       productId: value?._id,
       productName: value?.name,
+      status:"pending",
       type:values?.type=="subscription" ? "subscription" : values?.paymentType,
       oneTimePaymentAmount: value?.oneTimePaymentAmount,
       subscriptionDetails: {
@@ -92,32 +71,36 @@ const AddingProductService = ({ customer }) => {
     };
 
     try {
-      const result = await createData(invoiceData, "transaction"); // Wait for the promise to resolve
+      const result = await createData(invoiceData, "transaction");
       console.log("Transaction successfully", result);
       if (result.status == "success") {
-        toastSuccess("Successfully Transaction created");
-        setTransactionId(result?.data?._id);
-        setProductId(result?.data?.productId);
-        setCustomerId(result?.data?.customerId);
-        const month = getMonth(
-          result?.data?.paymentStartDate || "2025-01-23T00:00:00.000+00:00"
-        );
-        console.log("month", month);
-        setPaymentMonth(month);
+        setAlert("Successfully transacted. We will contact you soon. Thanks")
+        // toastSuccess("Successfully Transaction created");
+        // setTransactionId(result?.data?._id);
+        // setProductId(result?.data?.productId);
+        // setCustomerId(result?.data?.customerId);
+        // const month = getMonth(
+        //   result?.data?.paymentStartDate || "2025-01-23T00:00:00.000+00:00"
+        // );
+        // console.log("month", month);
+        // setPaymentMonth(month);
       }
+      setLoading(false)
     } catch (error) {
       console.error("Error creating data:", error);
       toastError("something went wrong");
+      setLoading(false)
     }
   };
 
   return (
     <div className="pageLayout">
+      <h2 style={{textAlign:"center", marginBottom:"30px"}}>Get this product/service</h2>
       {tab == 0 ? (
         <div>
-          <div className="content-topbar">
+          {/* <div className="content-topbar">
             <div className="content-title">
-              {/* <ArrowBackIcon /> */}
+
               <Typography
                 variant="h6"
                 component="h6"
@@ -127,7 +110,6 @@ const AddingProductService = ({ customer }) => {
               </Typography>
             </div>
             <div className="content-title">
-              {/* <Input size="md" placeholder="Search" />; */}
               <Button
                 size="md"
                 variant={"solid"}
@@ -136,18 +118,16 @@ const AddingProductService = ({ customer }) => {
               >
                 Save
               </Button>
-              {/* <Button size="md" variant={"solid"} color="primary"  onClick={()=>toggleDrawer("right", true)}>
-            {"right"}
-          </Button> */}
+
             </div>
-          </div>
+          </div> */}
           <div>
             <div className="createInvoiceFields">
               <Grid container spacing={2}>
                 {/* Grid Item that spans 2 columns */}
                 <Grid item xs={12} sm={6}>
                   <FormControl fullWidth>
-                    <FormLabel>Client</FormLabel>
+                    <FormLabel>Name </FormLabel>
 
                     <FormHelperText>{customer?.name}</FormHelperText>
                   </FormControl>
@@ -155,58 +135,19 @@ const AddingProductService = ({ customer }) => {
 
                 <Grid item xs={12} sm={6}>
                   <FormControl fullWidth>
-                    <FormLabel>Status</FormLabel>
-                    <Select
-                      onChange={(event, newValue) => {
-                        setValues({ ...values, status: newValue });
-                      }}
-                      placeholder="Select status"
-                      indicator={<KeyboardArrowDown />}
-                      sx={{
-                        width: "100%",
-                        [`& .${selectClasses.indicator}`]: {
-                          transition: "0.2s",
-                          [`&.${selectClasses.expanded}`]: {
-                            transform: "rotate(-180deg)",
-                          },
-                        },
-                      }}
-                    >
-                      <Option value="active">active</Option>
-                      <Option value="draft">draft</Option>
-                      <Option value="pending">pending</Option>
-                      <Option value="cancelled">cancelled</Option>
-                      <Option value="completed">completed</Option>
-                    </Select>
-                    <FormHelperText></FormHelperText>
-                  </FormControl>
-                </Grid>
-              </Grid>
-              <Grid container spacing={2} style={{ marginTop: "40px" }}>
-                <Grid item xs={12} sm={12}>
-                  <FormControl fullWidth>
                     <FormLabel>Product/service</FormLabel>
 
-                    <Autocomplete
-                      {...defaultProps}
-                      id="controlled-demo"
-                      value={value}
-                      onChange={(event, newValue) => {
-                        console.log("value", newValue);
-                        setValue(newValue);
-                      }}
-                      renderInput={(params) => (
-                        <TextField
-                          {...params}
-                          label="Product"
-                          variant="standard"
-                        />
-                      )}
-                    />
 
-                    <FormHelperText></FormHelperText>
+
+                    <FormHelperText>{value?.name}</FormHelperText>
                   </FormControl>
                 </Grid>
+
+
+
+              </Grid>
+              <Grid container spacing={2} style={{ marginTop: "40px" }}>
+
 
                 <Grid item xs={12} sm={6}>
                   <FormControl fullWidth>
@@ -222,23 +163,7 @@ const AddingProductService = ({ customer }) => {
                     <FormHelperText></FormHelperText>
                   </FormControl>
                 </Grid>
-                <Grid item xs={12} sm={6}>
-                  <FormControl fullWidth>
-                    <FormLabel>Description</FormLabel>
-                    <Textarea
-                      minRows={2}
-                      type="text"
-                      value={values.description}
-                      onChange={(event) =>
-                        setValues({
-                          ...values,
-                          description: event.target.value,
-                        })
-                      }
-                    />
-                    <FormHelperText></FormHelperText>
-                  </FormControl>
-                </Grid>
+
                 <Grid item xs={12} sm={6}>
                   <FormControl fullWidth>
                     <FormLabel>package Type</FormLabel>
@@ -269,7 +194,7 @@ const AddingProductService = ({ customer }) => {
                     <FormHelperText></FormHelperText>
                   </FormControl>
                 </Grid>
-                <Grid item xs={12} sm={6}></Grid>
+
 
                 {(values.type == "product" ||
                   values.type == "service") && (
@@ -408,20 +333,50 @@ const AddingProductService = ({ customer }) => {
                     <FormHelperText></FormHelperText>
                   </FormControl>
                 </Grid>
+
+                <Grid item xs={12} sm={12}>
+                  <FormControl fullWidth>
+                    <FormLabel>Address</FormLabel>
+
+                    <FormHelperText>{customer?.streetAddress}, {customer?.city}, {customer?.postalCode}</FormHelperText>
+                  </FormControl>
+                </Grid>
               </Grid>
 
               <Divider style={{ margin: "40px 0" }} />
 
+              <Typography
+                  color="success"
+                  fontSize="sm"
+                  sx={{ color: "#0B6BCB", textAlign: "center" }}
+                >
+                  {alert}
+                </Typography>
+
+
+
               <div style={{ display: "flex", justifyContent: "space-between" }}>
                 <div>
-                  <Button
+                  {/* <Button
                     size="md"
                     variant={"solid"}
                     color="primary"
                     onClick={handleInvoiceCreate}
                   >
                     Save
-                  </Button>
+                  </Button> */}
+
+                  <Button
+                  loading={loading}
+                    size="md"
+                  type="submit"
+                  variant={"solid"}
+                  style={{ marginTop: "20px" }}
+                  onClick={handleInvoiceCreate}
+                >
+                  Save
+                </Button>
+
                 </div>
               </div>
             </div>
@@ -543,4 +498,4 @@ const AddingProductService = ({ customer }) => {
   );
 };
 
-export default AddingProductService;
+export default PurchaseProduct;

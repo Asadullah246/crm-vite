@@ -23,6 +23,7 @@ import ProductService from "./pages/ProductService";
 import UpdatePayment from "./pages/UpdatedPayment";
 import ProtectedRoute from "./component/ProtectedRoute";
 import AdminRoute from "./component/AdminRoute";
+import SingleProduct from "./pages/SingleProduct";
 // import UploadCustomer from "./pages/UploadCustomer";
 
 function App() {
@@ -37,13 +38,16 @@ function App() {
                 <Route path="/" element={<DashboardInfo />} />
                 <Route path="customer" element={<Customer />} />
                 <Route path="product" element={<ProductService />} />
+                <Route path="product/:id" element={<SingleProduct />} />
                 <Route path="invoice" element={<Invoice />} />
                 <Route path="payments" element={<Payments />} />
                 <Route path="Signature" element={<SignaturePage />} />
                 <Route path="Profile" element={<Profile />} />
-                <Route element={<AdminRoute />}>
-                <Route path="Template" element={<WelcomeTemplate />} /> 
-                </Route>
+
+
+                {/* <Route element={<AdminRoute />}> */}
+                <Route path="Template" element={<WelcomeTemplate />} />
+                {/* </Route> */}
 
                 <Route
                   path="Template/create"
