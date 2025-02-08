@@ -91,13 +91,13 @@ export  function DropdownForCustomerSpecial({id, setRefresh, refresh, api, show,
           </ListItemDecorator>{' '}
           Add New Product/service
         </MenuItem>
-        <MenuItem
-        onClick={()=>navigate(show)}>
+        {/* <MenuItem
+        onClick={()=>navigate(show)}> 
           <ListItemDecorator>
             <Edit />
           </ListItemDecorator>{' '}
           Show
-        </MenuItem>
+        </MenuItem> */}
         <MenuItem
         onClick={()=>navigate(`/customer/${id}`)}>
           <ListItemDecorator>

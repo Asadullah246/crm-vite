@@ -20,7 +20,8 @@ function CustomerDashboard() {
 
   React.useEffect(() => {
     //   setLoading(true);
-    getData(`transaction/${user?._id}`)
+    if(user?._id) {
+      getData(`transaction/${user?._id}`)
       .then((response) => {
         setOrders(response?.data);
         //   setLoading(false);
@@ -29,12 +30,15 @@ function CustomerDashboard() {
         // setLoading(false)
         console.log("err", error);
       });
+    }
+
   }, [user]);
 
 
 
     React.useEffect(() => {
       const controller = new AbortController();
+
       setLoading(true);
 
       const handleForm = async () => {
@@ -60,8 +64,10 @@ function CustomerDashboard() {
           }
         }
       };
+      if(user?._id){
+        handleForm(); 
+      }
 
-      handleForm();
 
       return () => controller.abort(); // Cleanup: cancels the request when unmounted
     }, [user]);

@@ -5,7 +5,7 @@ import api from "./apiService";
 export const getData = async (endpoint) => {
     try {
       const response = await api.get(endpoint);
-      // console.log("res", response);
+      // console.log("res", response); 
       return response.data; // Return the data from the response
     } catch (error) {
       handleError(error);

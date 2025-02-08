@@ -6,6 +6,7 @@ import { createData, loginUser } from "../others/common";
 import loginImg from "../assets/login.webp";
 import Button from "@mui/joy/Button";
 import { useLocation, useNavigate } from "react-router-dom";
+import toastSuccess from "../component/Alert";
 // import Button from '@mui/material/Button';
 
 export default function AuthForm() {
@@ -16,7 +17,7 @@ export default function AuthForm() {
   const [loading, setLoading] = useState(false);
 
 
-  const navigate = useNavigate(); 
+  const navigate = useNavigate();
   const location = useLocation();
   const from = location.state?.from?.pathname || "/";
 
@@ -45,16 +46,22 @@ export default function AuthForm() {
   // Handle form submission
 
   const onSubmit = async (data) => {
+    setLoading(true);
     try {
       const result = await createData(data, "customer"); // Wait for the promise to resolve
       console.log("Customer created successfully", result);
       if (result.status == "success") {
+        toastSuccess("Successfully account created. Please Login");
         setTabIndex(0); // Switch to login tab after successful signup
+        setLoading(false);
       }
     } catch (error) {
       console.error("Error creating data:", error);
+      setLoading(false);
     }
   };
+
+
   const handleLogin = async (data) => {
   setLoading(true);
     try {
@@ -264,9 +271,17 @@ export default function AuthForm() {
                     />
                   </FormControl>
 
-                  <Button variant="contained" onClick={() => setSignupStep(2)}>
+                  {/* <Button variant="contained" onClick={() => setSignupStep(2)}>
                     Next
-                  </Button>
+                  </Button> */}
+                  <Button
+                  loading={false}
+                  // type="submit"
+                  style={{ marginTop: "20px" }}
+                  onClick={() => setSignupStep(2)}
+                >
+                  Next
+                </Button>
                 </Stack>
               )}
 
@@ -281,11 +296,20 @@ export default function AuthForm() {
                       render={({ field }) => <Input {...field} />}
                     />
                   </FormControl>
+                  <FormControl>
+                    <FormLabel>City</FormLabel>
+                    <Controller
+                      name="city"
+                      control={control}
+                      rules={{ required: "City is required" }}
+                      render={({ field }) => <Input {...field} />}
+                    />
+                  </FormControl>
 
                   <FormControl>
-                    <FormLabel>Address</FormLabel>
+                    <FormLabel>Street Address</FormLabel>
                     <Controller
-                      name="address"
+                      name="streetAddress"
                       control={control}
                       render={({ field }) => <Input {...field} />}
                     />
@@ -311,9 +335,18 @@ export default function AuthForm() {
                       </Button>
                     </Grid>
                     <Grid item xs={6}>
-                      <Button type="submit" variant="contained" fullWidth>
+                      {/* <Button type="submit" variant="contained" fullWidth>
                         Submit
-                      </Button>
+                      </Button> */}
+
+                      <Button
+                  loading={loading}
+                  type="submit"
+                  // style={{ marginTop: "20px" }}
+                >
+                  Sign Up
+                </Button>
+
                     </Grid>
                   </Grid>
                 </Stack>
