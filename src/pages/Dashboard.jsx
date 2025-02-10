@@ -264,7 +264,7 @@ function Dashboard(props) {
                 aria-label="open drawer"
                 edge="start"
                 onClick={handleDrawerToggle}
-                sx={{ mr: 2, color:"black", display: {sm: "none" } }} 
+                sx={{ mr: 2, color:"black", display: {sm: "none" } }}
               >
                 <MenuIcon />
               </IconButton>
@@ -276,7 +276,7 @@ function Dashboard(props) {
                 component="div"
                 sx={{marginTop:"7px"}}
               >
-               👋 Hi, {user?.name || "Admin"}
+               👋 Hi {user?.name ||  ""} 
               </Typography>
             </div>
             <div
