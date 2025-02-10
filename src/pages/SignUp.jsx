@@ -32,7 +32,7 @@ export default function AuthForm() {
 
   // Handle checkbox selection
   const handleRoleChange = (selectedRole) => {
-    setRole(selectedRole); // Only one role can be selected
+    setRole(selectedRole); // Only one role can be selected 
   };
 
   const {

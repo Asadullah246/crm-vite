@@ -1,6 +1,7 @@
 import axios from "axios";
 
-export const API_BASE_URL = 'http://localhost:7000/api/v1';
+// export const API_BASE_URL = 'http://localhost:7000/api/v1';
+export const API_BASE_URL = 'https://crmbackend.amsisecurity.co.uk/api/v1';
 
 
 const CLOUDFLARE_ACCOUNT_ID = "25bcc0e5e92cb8ce6fdad79ef0633673";
@@ -106,7 +107,7 @@ export const handleImageUploadToCloudflare = async (file, onProgress) => {
       {},
       {
         headers: {
-          Authorization: `Bearer ${CLOUDFLARE_API_KEY}`,  
+          Authorization: `Bearer ${CLOUDFLARE_API_KEY}`,
         },
       }
     );
