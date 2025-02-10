@@ -162,8 +162,8 @@ export default function BasicTable() {
             <TableCell align="right">Address</TableCell>
             <TableCell align="right">City</TableCell>
             <TableCell align="right">Postal Code</TableCell>
-            <TableCell align="right">Active Service(s)</TableCell>
-            <TableCell align="right"><span style={{backgroundColor: "#FFDD21", padding:"2px 7px", borderRadius:"6px"}} >Dues</span></TableCell>
+            <TableCell align="right">Due(s) service/product</TableCell>
+            <TableCell align="right"><span style={{backgroundColor: "#FFDD21", padding:"2px 7px", borderRadius:"6px"}} >Dues Amount</span></TableCell>
             <TableCell align="right">Manage</TableCell>
           </TableRow>
         </TableHead>
@@ -171,7 +171,7 @@ export default function BasicTable() {
           {data?.map((row) => (
             <TableRow
               key={row?._id}
-              sx={{ '&:last-child td, &:last-child th': { border: 0 } }} 
+              sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
             >
               <TableCell component="th" scope="row">
                 {row?.name}
@@ -182,7 +182,7 @@ export default function BasicTable() {
               <TableCell align="right">{row?.address}</TableCell>
               <TableCell align="right">{row?.city}</TableCell>
               <TableCell align="right">{row?.postalCode}</TableCell>
-              <TableCell align="right">{row?.dues?.length}</TableCell>
+              <TableCell align="right">{row?.dues?.length} </TableCell>
               <TableCell align="right"><span style={{backgroundColor: row?.totalAmountDue > 0 ? "#FFDD21":"", padding:"2px 7px", borderRadius:"6px"}}>
               ${row?.totalAmountDue}
                 </span></TableCell>
