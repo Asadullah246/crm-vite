@@ -34,29 +34,67 @@ export default function BasicTable() {
     const navigate=useNavigate();
     const [isModalOpen, setModalOpen] = React.useState(false);
     const [currentCustomer, setCurrentCustomer]=React.useState();
+      const [search, setSearch] = React.useState("");
 
 
-    React.useEffect(() => {
-      let isMounted = true; // To track if the component is still mounted
-      setLoading(true);
+    // React.useEffect(() => {
+    //   let isMounted = true;
+    //   setLoading(true);
 
-      const handleForm = async () => {
-        try {
-          const result = await getData("customer");
-          setData(result?.data);
-          if (isMounted) setLoading(false);
-        } catch (error) {
-          console.error("Error creating data:", error);
-          if (isMounted) setLoading(false);
-        }
-      };
+    //   const handleForm = async () => {
+    //     try {
+    //       const result = await getData("customer");
+    //       setData(result?.data);
+    //       if (isMounted) setLoading(false);
+    //     } catch (error) {
+    //       console.error("Error creating data:", error);
+    //       if (isMounted) setLoading(false);
+    //     }
+    //   };
 
-      handleForm();
+    //   handleForm();
 
-      return () => {
-        isMounted = false; // Cleanup flag when component unmounts
-      };
-    }, [refresh]);
+    //   return () => {
+    //     isMounted = false;
+    //   };
+    // }, [refresh]);
+
+
+
+      React.useEffect(() => {
+        let isMounted = true; // Track if component is still mounted
+        setLoading(true);
+
+        const fetchProducts = async () => {
+          setData([]);
+
+          try {
+            // Construct query parameters dynamically
+            const queryParams = new URLSearchParams();
+            if (search) queryParams.append("search", search);
+            // if (user?._id) queryParams.append("customerId", user?._id);
+
+            const result = await getData(`customer?${queryParams.toString()}`); // Fetch with filters
+            if (isMounted) {
+              setData(result?.data || []);
+              setLoading(false);
+            }
+          } catch (error) {
+            console.error("Error fetching data:", error);
+            if (isMounted) setLoading(false);
+          }
+        };
+
+        fetchProducts();
+
+        return () => {
+          isMounted = false; // Cleanup when component unmounts
+        };
+      }, [ search, refresh]);
+
+
+
+
 
 
     // const handleOpenModal = () => {
@@ -112,22 +150,27 @@ export default function BasicTable() {
       )} */}
     <div className='content-topbar'>
         <div className='content-title' >
-           <ArrowBackIcon/>
+           <ArrowBackIcon style={{cursor:"pointer" }}  onClick={() => navigate(-1)}/>
            <Typography variant="h6" component="h6" style={{fontWeight:"bold"}} >
            Customers
       </Typography>
         </div>
         <div className='content-title'>
-        <Input size="md" placeholder="Search" />
+
+        <Input
+            size="md"
+            placeholder="Search customer..."
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+          />
+
         <Button size="md" variant={"solid"} color="primary" onClick={toggleDrawer(true)}>
           Add New Customer
-        </Button>
-        <Button size="md" variant={"outlined"} color="primary" onClick={()=>navigate("/upload-customer")}>
+        </Button> 
+        {/* <Button size="md" variant={"outlined"} color="primary" onClick={()=>navigate("/upload-customer")}>
           Upload Customers
-        </Button>
-        {/* <Button size="md" variant={"solid"} color="primary"  onClick={()=>toggleDrawer("right", true)}>
-            {"right"}
-          </Button> */}
+        </Button> */}
+
         </div>
     </div>
      <TableContainer component={Paper}>

@@ -9,6 +9,7 @@ import { postData } from "../others/api";
 import toastSuccess from "../component/Alert";
 
 const CreateWelcomeTemplate = () => {
+  const navigate = useNavigate();
   const [info, setInfo] = useState();
   const [name,setName]=useState("")
   const [cat,setCat]=useState("")
@@ -34,7 +35,7 @@ const CreateWelcomeTemplate = () => {
     <div>
       <div className="content-topbar">
         <div className="content-title">
-          <ArrowBackIcon />
+          <ArrowBackIcon style={{cursor:"pointer" }}  onClick={() => navigate(-1)} />
           <Typography
             variant="h6"
             component="h6"

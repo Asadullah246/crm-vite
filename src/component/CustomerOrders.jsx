@@ -51,7 +51,7 @@ export default function CustomerOrders({header=true}) {
     const fetchProducts = async () => {
       setData([]);
       if (!user?._id) {
-        return; // Early return if user._id is not found 
+        return; // Early return if user._id is not found
       }
       try {
         // Construct query parameters dynamically
@@ -93,7 +93,7 @@ export default function CustomerOrders({header=true}) {
      <>
       <div className="content-topbar">
         <div className="content-title">
-          <ArrowBackIcon />
+          <ArrowBackIcon style={{cursor:"pointer" }}  onClick={() => navigate(-1)} />
           <Typography
             variant="h6"
             component="h6"

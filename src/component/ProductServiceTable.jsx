@@ -18,6 +18,7 @@ import EditProduct from "./EditProduct";
 import toastSuccess from "./Alert";
 
 export default function ProductServiceTable() {
+  const navigate = useNavigate();
   const [state, setState] = React.useState(false);
   const [editState, setEditState] = React.useState(false);
   const [data, setData] = React.useState([]);
@@ -108,7 +109,7 @@ export default function ProductServiceTable() {
 
       <div className="content-topbar">
         <div className="content-title">
-          <ArrowBackIcon />
+          <ArrowBackIcon style={{cursor:"pointer" }}  onClick={() => navigate(-1)} />
           <Typography
             variant="h6"
             component="h6"

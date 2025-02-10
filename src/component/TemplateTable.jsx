@@ -31,7 +31,7 @@ export default function TemplateTable({category, redirectUrl}) {
       getData('/template')
         .then((response) => {
             // const categoriedData=response?.data?.filter(single=>single?.category==category)
-          setData(response?.data); 
+          setData(response?.data);
           setLoading(false);
         })
         .catch(() => setLoading(false));
@@ -56,7 +56,7 @@ export default function TemplateTable({category, redirectUrl}) {
     <AddNewCustomer state={state} setState={setState} toggleDrawer={toggleDrawer} ></AddNewCustomer>
     <div className='content-topbar'>
         <div className='content-title'>
-           <ArrowBackIcon/>
+           <ArrowBackIcon style={{cursor:"pointer" }}  onClick={() => navigate(-1)}/>
            <Typography variant="h6" component="h6" style={{fontWeight:"bold"}} >
         Invoices
       </Typography>

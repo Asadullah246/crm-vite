@@ -13,8 +13,10 @@ import KeyboardArrowDown from "@mui/icons-material/KeyboardArrowDown";
 import { Grid } from "@mui/joy";
 import toastSuccess from "../component/Alert";
 import { getData, postData } from "../others/api";
+import { useNavigate } from "react-router-dom";
 
 const CreateInvoice = () => {
+  const navigate = useNavigate();
   const [values, setValues] = React.useState({});
   const [data, setData] = React.useState([]);
   const [loading, setLoading] = React.useState(false);
@@ -53,7 +55,7 @@ const CreateInvoice = () => {
     <div className="pageLayout">
       <div className="content-topbar">
         <div className="content-title">
-          <ArrowBackIcon />
+          <ArrowBackIcon style={{cursor:"pointer" }}  onClick={() => navigate(-1)} />
           <Typography
             variant="h6"
             component="h6"

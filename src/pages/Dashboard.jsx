@@ -169,7 +169,7 @@ function Dashboard(props) {
                   >
                     <ListItemIcon sx={{ color: isActive ? "white" : "black", }}>
                       {index === 0 && <DashboardIcon /> }
-                      {index === 1 && <ManageAccountsIcon /> } 
+                      {index === 1 && <ManageAccountsIcon /> }
                       {index === 2 && <ProductionQuantityLimitsIcon /> }
                       {index === 3 && <PaymentIcon /> }
                       {index === 4 && <Person2Icon /> }
@@ -258,13 +258,13 @@ function Dashboard(props) {
       >
         <Toolbar style={{ backgroundColor: "#F4F7FB", boxShadow: "none" }}>
           <div style={{ width: "100%", paddingTop:"10px", paddingBottom:"10px", marginBottom:"30px" }} className="normalFlexWithSpaceBetween">
-            <div>
+            <div style={{display:"flex"}}>
               <IconButton
                 color="inherit"
                 aria-label="open drawer"
                 edge="start"
                 onClick={handleDrawerToggle}
-                sx={{ mr: 2, display: {sm: "none" } }}
+                sx={{ mr: 2, color:"black", display: {sm: "none" } }} 
               >
                 <MenuIcon />
               </IconButton>
@@ -274,6 +274,7 @@ function Dashboard(props) {
                 noWrap
                 style={{ color: "#0B6BCB", fontWeight: 600 }}
                 component="div"
+                sx={{marginTop:"7px"}}
               >
                👋 Hi, {user?.name || "Admin"}
               </Typography>

@@ -13,7 +13,7 @@ import KeyboardArrowDown from "@mui/icons-material/KeyboardArrowDown";
 import { Grid } from "@mui/joy";
 import { getData, postData } from "../others/api";
 import toastSuccess, { toastError } from "./Alert";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
@@ -28,7 +28,7 @@ import { createData } from "../others/common";
 
 const CreatePayment = () => {
   const { id } = useParams();
-
+  const navigate = useNavigate();
   const [values, setValues] = React.useState({});
   const [data, setData] = React.useState([]);
   const [loading, setLoading] = React.useState(false);
@@ -55,7 +55,7 @@ const CreatePayment = () => {
             return accumulator + currentItem.totalAmountDue;
           }, 0);
           setTotal(totalAmount);
-          setPaymentInfo(result?.data?.dues); 
+          setPaymentInfo(result?.data?.dues);
         }
         setLoading(false);
       } catch (error) {
@@ -99,7 +99,7 @@ console.log("invoice data", invoiceData);
     <div>
       <div className="content-topbar">
         <div className="content-title">
-          <ArrowBackIcon />
+          <ArrowBackIcon style={{cursor:"pointer" }}  onClick={() => navigate(-1)} />
           <Typography
             variant="h6"
             component="h6"

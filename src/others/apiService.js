@@ -1,9 +1,10 @@
 import axios from 'axios';
+import { API_BASE_URL } from './common';
 
 // Create an Axios instance
 const api = axios.create({
   // baseURL: 'http://localhost:7000/api/v1',
-  baseURL: 'https://crmbackend.amsisecurity.co.uk/api/v1',
+  baseURL: API_BASE_URL,
   timeout: 10000, // Optional timeout
   headers: {
     'Content-Type': 'application/json',

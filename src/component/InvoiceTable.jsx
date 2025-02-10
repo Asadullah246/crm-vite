@@ -53,7 +53,7 @@
 //     <AddNewCustomer state={state} setState={setState} toggleDrawer={toggleDrawer} ></AddNewCustomer>
 //     <div className='content-topbar'>
 //         <div className='content-title'>
-//            <ArrowBackIcon/>
+//            <ArrowBackIcon style={{cursor:"pointer" }} />
 //            <Typography variant="h6" component="h6" style={{fontWeight:"bold"}} >
 //         Invoices
 //       </Typography>
@@ -172,7 +172,7 @@ export default function InvoiceTable() {
 
       <div className="content-topbar">
         <div className="content-title">
-          <ArrowBackIcon />
+          <ArrowBackIcon style={{cursor:"pointer" }}  onClick={() => navigate(-1)} />
           <Typography variant="h6" style={{ fontWeight: "bold" }}>
             Invoices
           </Typography>
@@ -211,7 +211,7 @@ export default function InvoiceTable() {
                 <TableCell align="right">{row?.total}</TableCell>
                 <TableCell align="right">{row?.status}</TableCell>
                 <TableCell align="right">
-                  <MUIButton onClick={() => handleOpen(row)}>View</MUIButton> 
+                  <MUIButton onClick={() => handleOpen(row)}>View</MUIButton>
                 </TableCell>
                  <TableCell align="right"><DropdownForCustomer id={row?._id} setRefresh={setRefresh} refresh={refresh} api={"invoice"} /></TableCell>
 

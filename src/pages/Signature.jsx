@@ -4,8 +4,10 @@ import SignatureCanvas from "react-signature-canvas";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import Button from '@mui/joy/Button';
 import Input from "@mui/joy/Input";
+import { useNavigate } from "react-router-dom";
 
 export default function SignaturePage() {
+  const navigate = useNavigate();
   const sigPad = useRef(null);
 
   const clearSignature = () => {
@@ -24,7 +26,7 @@ export default function SignaturePage() {
     <div className="pageLayout">
       <div className="content-topbar">
         <div className="content-title">
-          <ArrowBackIcon />
+          <ArrowBackIcon style={{cursor:"pointer" }}  onClick={() => navigate(-1)} />
           <Typography
             variant="h6"
             component="h6"

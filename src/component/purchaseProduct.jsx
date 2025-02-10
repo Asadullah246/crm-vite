@@ -33,7 +33,7 @@ const PurchaseProduct = ({ value }) => {
     const userData=JSON.parse(localStorage.getItem("user"));
     setCustomer(userData)
   },[])
-console.log("cutomer", customer); 
+console.log("cutomer", customer);
   const defaultProps = {
     options: data,
     getOptionLabel: (option) => option?.name,
@@ -386,7 +386,7 @@ console.log("cutomer", customer);
         // <div>
         //    <div className="content-topbar">
         //     <div className="content-title">
-        //       {/* <ArrowBackIcon /> */}
+        //       {/* <ArrowBackIcon style={{cursor:"pointer" }}  /> */}
         //       <Typography
         //         variant="h6"
         //         component="h6"

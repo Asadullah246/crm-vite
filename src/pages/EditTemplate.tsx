@@ -9,6 +9,7 @@ import { getData, postData, updateData } from "../others/api";
 import toastSuccess from "../component/Alert";
 
 const EditTemplate = () => {
+  const navigate = useNavigate();
     const { id } = useParams();
   const [info, setInfo] = useState();
   const [name,setName]=useState("")
@@ -46,7 +47,7 @@ const EditTemplate = () => {
     updateData(`/template/${id}`, data)
       .then((response) => {
         toastSuccess("Successfully Template updated");
-        
+
       });
   };
 
@@ -54,7 +55,7 @@ const EditTemplate = () => {
     <div>
       <div className="content-topbar">
         <div className="content-title">
-          <ArrowBackIcon />
+          <ArrowBackIcon style={{cursor:"pointer" }}  onClick={() => navigate(-1)} />
           <Typography
             variant="h6"
             component="h6"

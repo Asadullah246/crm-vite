@@ -19,9 +19,10 @@ import Autocomplete from "@mui/material/Autocomplete";
 import Stack from "@mui/material/Stack";
 import { Radio, RadioGroup } from "@mui/joy";
 import { createData } from "../others/common";
+import { useNavigate } from "react-router-dom";
 
 const AddingProductService = ({ customer }) => {
-  // console.log("cust", customer);
+  const navigate = useNavigate();
   const [values, setValues] = React.useState({});
   const [data, setData] = React.useState([]);
   const [loading, setLoading] = React.useState(false);
@@ -51,7 +52,7 @@ const AddingProductService = ({ customer }) => {
         const result = await getData("product");
         setData(result?.data);
         if (isMounted) setLoading(false);
-      } catch (error) { 
+      } catch (error) {
         console.error("Error creating data:", error);
         if (isMounted) setLoading(false);
       }
@@ -117,7 +118,7 @@ const AddingProductService = ({ customer }) => {
         <div>
           <div className="content-topbar">
             <div className="content-title">
-              {/* <ArrowBackIcon /> */}
+              {/* <ArrowBackIcon style={{cursor:"pointer" }}  /> */}
               <Typography
                 variant="h6"
                 component="h6"
@@ -431,7 +432,7 @@ const AddingProductService = ({ customer }) => {
         // <div>
         //    <div className="content-topbar">
         //     <div className="content-title">
-        //       {/* <ArrowBackIcon /> */}
+        //       {/* <ArrowBackIcon style={{cursor:"pointer" }}  /> */}
         //       <Typography
         //         variant="h6"
         //         component="h6"

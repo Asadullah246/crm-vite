@@ -13,7 +13,7 @@ const DashboardInfo = () => {
     <div  className='pageLayout' >
       {/* <div className="content-topbar">
         <div className="content-title">
-          <ArrowBackIcon />
+          <ArrowBackIcon style={{cursor:"pointer" }}  />
           <Typography
             variant="h6"
             component="h6"

@@ -76,7 +76,7 @@ export default function AllOrders({header=true}) {
     return () => {
       isMounted = false; // Cleanup when component unmounts
     };
-  }, [status, search, user, refresh]); // Re-fetch when status or search changes
+  }, [status, search, user, refresh]); 
 
 
   const deleteItem = (id) => {
@@ -93,7 +93,7 @@ export default function AllOrders({header=true}) {
      <>
       <div className="content-topbar">
         <div className="content-title">
-          <ArrowBackIcon />
+          <ArrowBackIcon style={{cursor:"pointer" }}  onClick={() => navigate(-1)} />
           <Typography
             variant="h6"
             component="h6"
