@@ -16,7 +16,7 @@ import DropdownForCustomer, {
   DropdownForCustomerSpecial,
 } from "./DropdownForCustomer";
 import { useNavigate } from "react-router-dom";
-import { fetchData } from "../others/common";
+import { fetchData, updateData } from "../others/common";
 import AddingProductService from "./AddingProductService";
 import Modal from "@mui/joy/Modal";
 import ModalClose from "@mui/joy/ModalClose";
@@ -24,9 +24,9 @@ import ModalDialog from "@mui/joy/ModalDialog";
 import DialogTitle from "@mui/joy/DialogTitle";
 import DialogContent from "@mui/joy/DialogContent";
 import OrderQuery from "./OrderQuery";
-import toastSuccess from "./Alert";
+import toastSuccess, { toastError } from "./Alert";
 
-export default function AllOrders({header=true}) {
+export default function AllOrders({ header = true }) {
   const [state, setState] = React.useState(false);
   const [data, setData] = React.useState([]);
   const [loading, setLoading] = React.useState(false);
@@ -38,7 +38,6 @@ export default function AllOrders({header=true}) {
   const [search, setSearch] = React.useState("");
   const [status, setStatus] = React.useState(""); // "active" or "pending"
   const [user, setUser] = React.useState();
-
 
   React.useEffect(() => {
     const getUser = JSON.parse(localStorage.getItem("user"));
@@ -76,8 +75,7 @@ export default function AllOrders({header=true}) {
     return () => {
       isMounted = false; // Cleanup when component unmounts
     };
-  }, [status, search, user, refresh]); 
-
+  }, [status, search, user, refresh]);
 
   const deleteItem = (id) => {
     deleteData(`/transaction/${id}`).then(() => {
@@ -86,45 +84,68 @@ export default function AllOrders({header=true}) {
     });
   };
 
+  const handleEdit = async (editName, transactionIdToChange) => {
+    // e?.prevent?.default();
+    //  setLoading(true)
+    const formData = {
+      status: editName, 
+    };
+    console.log("status", editName);
+
+    try {
+      const result = await updateData(formData, `transaction/${transactionIdToChange}`); // Wait for the promise to resolve
+
+      if (result.status == "success") {
+        // setLoading(false)
+        toastSuccess(`Successfully updated ${editName}`);
+      }
+    } catch (error) {
+      setLoading(false);
+      console.error("Error creating data:", error);
+      toastError("something went wrong");
+    }
+  };
+
   return (
     <>
-
-     { header &&
-     <>
-      <div className="content-topbar">
-        <div className="content-title">
-          <ArrowBackIcon style={{cursor:"pointer" }}  onClick={() => navigate(-1)} />
-          <Typography
-            variant="h6"
-            component="h6"
-            style={{ fontWeight: "bold" }}
-          >
-            My Orders
-          </Typography>
-        </div>
-        <div className="content-title">
-          <Input
-            size="md"
-            placeholder="Search orders..."
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-          />
-          <Button
-            size="md"
-            variant={"solid"}
-            color="primary"
-            onClick={()=>navigate("/product")}
-          >
-            Purchase new product/service
-          </Button>
-
-
-        </div>
-      </div>
-      <div style={{ marginBottom: "16px", width: "fit-content" }}>
-        <OrderQuery setStatus={setStatus} />
-      </div>
-      </>}
+      {header && (
+        <>
+          <div className="content-topbar">
+            <div className="content-title">
+              <ArrowBackIcon
+                style={{ cursor: "pointer" }}
+                onClick={() => navigate(-1)}
+              />
+              <Typography
+                variant="h6"
+                component="h6"
+                style={{ fontWeight: "bold" }}
+              >
+                My Orders
+              </Typography>
+            </div>
+            <div className="content-title">
+              <Input
+                size="md"
+                placeholder="Search orders..."
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+              />
+              <Button
+                size="md"
+                variant={"solid"}
+                color="primary"
+                onClick={() => navigate("/product")}
+              >
+                Purchase new product/service
+              </Button>
+            </div>
+          </div>
+          <div style={{ marginBottom: "16px", width: "fit-content" }}>
+            <OrderQuery setStatus={setStatus} />
+          </div>
+        </>
+      )}
       <TableContainer component={Paper}>
         <Table
           sx={{ minWidth: "100%", width: "100%" }}
@@ -205,24 +226,35 @@ export default function AllOrders({header=true}) {
                     setRefresh={setRefresh}
                     refresh={refresh}
                     api={"transaction"}
-                    handleEdit={() => {
-                      console.log("calling");
+                    handleEdit={(editName) => {
+                      handleEdit(editName, row?._id);
                     }}
                     handleDelete={() => deleteItem(row?._id)}
-                    buttonList={["Delete"]}
+                    buttonList={[
+                      "active",
+                      "completed",
+                      "pending",
+                      "draft",
+                      "cancelled",
+                      "Delete",
+                    ].filter((status) => status !== row?.status)}
                   />
                 </TableCell>
               </TableRow>
             ))}
-            {(data?.length<1 && !loading) && <h4 style={{paddingLeft:"20px"}}>No data exist</h4>}
+            {data?.length < 1 && !loading && (
+              <h4 style={{ paddingLeft: "20px" }}>No data exist</h4>
+            )}
           </TableBody>
         </Table>
       </TableContainer>
 
       {loading && (
-        <Button loading={true} variant="plain" style={{ marginTop: "20px" , display:"block" , margin:"auto"}}>
-
-        </Button>
+        <Button
+          loading={true}
+          variant="plain"
+          style={{ marginTop: "20px", display: "block", margin: "auto" }}
+        ></Button>
       )}
     </>
   );

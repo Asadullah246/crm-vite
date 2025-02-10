@@ -36,11 +36,15 @@ export default function DropdownForCustomer({id, setRefresh, refresh, api, show,
             variant="soft" color={item=="Delete"? "danger":""} sx={{gap:0 }}
             onClick={()=>{
               if(item=="Edit"){
-                handleEdit()
+                handleEdit(item)
               }
-              if(item=="Delete"){
+             else if(item=="Delete"){
                 handleDelete()
               }
+              else {
+                handleEdit(item) 
+              }
+
             }}>
               <ListItemDecorator>
                 {item== "Edit" &&  <Edit sx={{width:18}}  /> }
@@ -92,7 +96,7 @@ export  function DropdownForCustomerSpecial({id, setRefresh, refresh, api, show,
           Add New Product/service
         </MenuItem>
         {/* <MenuItem
-        onClick={()=>navigate(show)}> 
+        onClick={()=>navigate(show)}>
           <ListItemDecorator>
             <Edit />
           </ListItemDecorator>{' '}
