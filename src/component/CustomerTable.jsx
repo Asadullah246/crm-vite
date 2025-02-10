@@ -37,29 +37,6 @@ export default function BasicTable() {
       const [search, setSearch] = React.useState("");
 
 
-    // React.useEffect(() => {
-    //   let isMounted = true;
-    //   setLoading(true);
-
-    //   const handleForm = async () => {
-    //     try {
-    //       const result = await getData("customer");
-    //       setData(result?.data);
-    //       if (isMounted) setLoading(false);
-    //     } catch (error) {
-    //       console.error("Error creating data:", error);
-    //       if (isMounted) setLoading(false);
-    //     }
-    //   };
-
-    //   handleForm();
-
-    //   return () => {
-    //     isMounted = false;
-    //   };
-    // }, [refresh]);
-
-
 
       React.useEffect(() => {
         let isMounted = true; // Track if component is still mounted
@@ -78,6 +55,7 @@ export default function BasicTable() {
             if (isMounted) {
               setData(result?.data || []);
               setLoading(false);
+              console.log("customer", result);
             }
           } catch (error) {
             console.error("Error fetching data:", error);
@@ -166,7 +144,7 @@ export default function BasicTable() {
 
         <Button size="md" variant={"solid"} color="primary" onClick={toggleDrawer(true)}>
           Add New Customer
-        </Button> 
+        </Button>
         {/* <Button size="md" variant={"outlined"} color="primary" onClick={()=>navigate("/upload-customer")}>
           Upload Customers
         </Button> */}
@@ -184,6 +162,8 @@ export default function BasicTable() {
             <TableCell align="right">Address</TableCell>
             <TableCell align="right">City</TableCell>
             <TableCell align="right">Postal Code</TableCell>
+            <TableCell align="right">Active Service(s)</TableCell>
+            <TableCell align="right"><span style={{backgroundColor: "#FFDD21", padding:"2px 7px", borderRadius:"6px"}} >Dues</span></TableCell>
             <TableCell align="right">Manage</TableCell>
           </TableRow>
         </TableHead>
@@ -202,6 +182,10 @@ export default function BasicTable() {
               <TableCell align="right">{row?.address}</TableCell>
               <TableCell align="right">{row?.city}</TableCell>
               <TableCell align="right">{row?.postalCode}</TableCell>
+              <TableCell align="right">{row?.dues?.length}</TableCell>
+              <TableCell align="right"><span style={{backgroundColor: row?.totalAmountDue > 0 ? "#FFDD21":"", padding:"2px 7px", borderRadius:"6px"}}>
+              ${row?.totalAmountDue}
+                </span></TableCell>
               <TableCell align="right"><DropdownForCustomerSpecial id={row?._id}  setRefresh={setRefresh} refresh={refresh} api={"customer"} newProductAdd={()=>newProductAdd(row)} /></TableCell>
             </TableRow>
           ))}

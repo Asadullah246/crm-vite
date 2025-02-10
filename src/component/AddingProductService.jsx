@@ -75,7 +75,7 @@ const AddingProductService = ({ customer }) => {
   const handleInvoiceCreate = async (e) => {
     e?.prevent?.default();
 
-    // setTab(1);
+   setLoading(true);
 
     const { paymentType, ...restValues } = values;
 
@@ -96,6 +96,7 @@ const AddingProductService = ({ customer }) => {
       const result = await createData(invoiceData, "transaction"); // Wait for the promise to resolve
       console.log("Transaction successfully", result);
       if (result.status == "success") {
+        setLoading(false); 
         toastSuccess("Successfully Transaction created");
         setTransactionId(result?.data?._id);
         setProductId(result?.data?.productId);
@@ -107,6 +108,7 @@ const AddingProductService = ({ customer }) => {
         setPaymentMonth(month);
       }
     } catch (error) {
+      setLoading(false); 
       console.error("Error creating data:", error);
       toastError("something went wrong");
     }
@@ -133,6 +135,7 @@ const AddingProductService = ({ customer }) => {
                 size="md"
                 variant={"solid"}
                 color="primary"
+                loading={loading}
                 onClick={handleInvoiceCreate}
               >
                 Save
@@ -419,6 +422,7 @@ const AddingProductService = ({ customer }) => {
                     size="md"
                     variant={"solid"}
                     color="primary"
+                    loading={loading}
                     onClick={handleInvoiceCreate}
                   >
                     Save
