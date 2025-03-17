@@ -29,7 +29,7 @@ To set up and run this project locally:
 ```bash
 # Clone the repository
 git clone <repo-link>
-cd dashboard
+cd crm-vite
 
 # Install dependencies
 npm install
