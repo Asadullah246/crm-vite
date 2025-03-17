@@ -28,7 +28,7 @@ The **CRM Dashboard** is a modern, fast, and efficient customer relationship man
 To set up and run this project locally:
 ```bash
 # Clone the repository
-git clone <repo-link>
+git clone https://github.com/Asadullah246/crm-vite.git
 cd crm-vite
 
 # Install dependencies
