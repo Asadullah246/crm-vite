@@ -1,69 +1,50 @@
-# React + Vite
+# CRM Dashboard Frontend
+## live link: http://crm.amsisecurity.co.uk/
+login credential as admin :
+email: admin@gmail.com
+password: admin
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## Project Overview
+The **CRM Dashboard** is a modern, fast, and efficient customer relationship management (CRM) frontend application built using **Vite** and **React**. It provides a seamless and interactive user experience, integrating powerful UI components and data visualization tools.
 
-Currently, two official plugins are available:
+## Features
+- **Fast and Lightweight**: Powered by **Vite** for rapid development and performance.
+- **Material UI Integration**: Uses **MUI**, **MUI Joy**, and **MUI X** components for a polished UI.
+- **Data Visualization**: Integrated with **MUI X Charts** for analytics and insights.
+- **Rich Text Editing**: Utilizes **TinyMCE React** for content editing.
+- **Form Handling**: Efficient data handling with **React Hook Form**.
+- **PDF & Print Support**: Export documents using **react-to-pdf** and **react-to-print**.
+- **Excel Export**: Manage data in spreadsheet format with **xlsx**.
+- **Real-Time Notifications**: Uses **react-toastify** for user alerts.
+- **Signature Capture**: Supports digital signatures using **react-signature-canvas**.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## Tech Stack
+- **Frontend Framework**: React with Vite
+- **UI Components**: MUI, Joy UI, MUI X Data Grid
+- **State Management**: React Hooks
+- **APIs & Utilities**: Axios, Moment.js, React Router DOM
+
+## Installation
+To set up and run this project locally:
+```bash
+# Clone the repository
+git clone <repo-link>
+cd dashboard
+
+# Install dependencies
+npm install
+
+# Run the development server
+npm run dev
+```
+
+## Available Scripts
+- `npm run dev` - Start the development server
+- `npm run build` - Build the production version
+- `npm run preview` - Preview the production build
+- `npm run lint` - Run ESLint for code quality checks
 
 
 
-
-client
-:
-"MD Asadulllah"
-clientId
-:
-"6759cd54edd4b24f8ff95707"
-createdAt
-:
-"2024-12-11T18:17:20.763Z"
-date
-:
-"2024-12-20"
-description
-:
-"atik enpre"
-expireDate
-:
-"2024-12-13"
-note
-:
-"dfgdfg dfg"
-number
-:
-454
-price
-:
-45
-service
-:
-"sdfsfsd"
-status
-:
-"sent"
-subTotal
-:
-45
-total
-:
-45454
-updatedAt
-:
-"2024-12-11T18:17:20.763Z"
-vat
-:
-45
-vatPrice
-:
-4545
-year
-:
-"2024"
-__v
-:
-0
-_id
-:
-"6759d730edd4b24f8ff9573a"
+## Contact
+For inquiries or support, please reach out to asadm2258@gmail.com
